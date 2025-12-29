@@ -1,13 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useAppState } from '../../context/AppStateContext';
-import { parseFiles } from '../../services/reportService';
 
 /**
  * PUBLIC_INTERFACE
  * UploadArea - Allows selecting CSV/Jira export files and parses them via service.
  */
 export default function UploadArea() {
-  const { setUploadedFiles, setPreview, rules, parseFile } = useAppState();
+  // Use stable action; keep no direct service usage here.
+  const { parseFile } = useAppState();
   const [status, setStatus] = useState('Idle');
   const [error, setError] = useState('');
   const inputRef = useRef(null);
@@ -18,23 +18,14 @@ export default function UploadArea() {
       setStatus('Parsing...');
       try {
         const files = Array.from(fileList || []);
-        // Prefer new action which updates uploadedFiles, normalizedTasks, and preview
-        if (parseFile) {
-          await parseFile(files);
-        } else {
-          // Backward fallback (should not be hit after context update)
-          setUploadedFiles(files);
-          const rows = await parseFiles(files);
-          const groups = await (await import('../../services/reportService')).generatePreview(rows, rules);
-          setPreview(groups);
-        }
+        await parseFile(files);
         setStatus(`Parsed ${files.length} file(s)`);
       } catch (e) {
         setError('Failed to parse files.');
         setStatus('Idle');
       }
     },
-    [setUploadedFiles, setPreview, rules, parseFile]
+    [parseFile]
   );
 
   // PUBLIC_INTERFACE

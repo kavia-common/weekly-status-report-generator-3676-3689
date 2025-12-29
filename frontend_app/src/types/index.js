@@ -4,6 +4,7 @@
  * This file defines the stable, public shape of core data structures used
  * across components and the app state context.
  */
+
 /**
  * PUBLIC_INTERFACE
  * @typedef {Object} Task
@@ -49,3 +50,11 @@
  * This is the type used by the AppStateContext 'preview' value.
  * @typedef {ReportPreviewGroup[]} ReportPreviewData
  */
+
+// Fake exports for tooling discoverability in JS projects.
+// These do not emit runtime exports but help IDEs track symbols.
+/** @type {null} */ export const __Task = null;
+/** @type {null} */ export const __RuleConfig = null;
+/** @type {null} */ export const __ReportPreviewItem = null;
+/** @type {null} */ export const __ReportPreviewGroup = null;
+/** @type {null} */ export const __ReportPreviewData = null;

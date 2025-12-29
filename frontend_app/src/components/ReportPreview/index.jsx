@@ -6,20 +6,21 @@ import { useAppState } from '../../context/AppStateContext';
  * ReportPreview - Shows grouped preview data.
  */
 export default function ReportPreview() {
-  const { preview } = useAppState();
+  const { reportPreview, preview } = useAppState();
+  const data = reportPreview || preview || [];
 
   return (
     <section className="op-section">
       <h2 className="op-title">Report Preview</h2>
       <p className="op-subtitle">A quick look at how your report will be structured.</p>
 
-      {(!preview || preview.length === 0) ? (
+      {(!data || data.length === 0) ? (
         <div className="op-card" style={{ color: 'var(--op-muted)' }}>
           No data yet. Upload files to see a preview.
         </div>
       ) : (
         <div style={{ display: 'grid', gap: 12 }}>
-          {preview.map((group) => (
+          {data.map((group) => (
             <div key={group.group} className="op-card">
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
                 {group.group} — {group.totalHours}h

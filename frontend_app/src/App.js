@@ -7,7 +7,10 @@ import RuleConfig from './components/RuleConfig';
 import ReportPreview from './components/ReportPreview';
 import ExportPanel from './components/ExportPanel';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * App - Root component wiring provider and all feature sections.
+ */
 function App() {
   const [theme, setTheme] = useState('light');
 

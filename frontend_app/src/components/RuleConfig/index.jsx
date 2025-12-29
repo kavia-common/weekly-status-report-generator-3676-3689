@@ -6,10 +6,16 @@ import { useAppState } from '../../context/AppStateContext';
  * RuleConfig - Starter controls for rule configuration.
  */
 export default function RuleConfig() {
-  const { rules, setRules } = useAppState();
+  const { rules, updateRules, setRules } = useAppState();
 
   const update = (key, value) => {
-    setRules((prev) => ({ ...prev, [key]: value }));
+    // Prefer stable action
+    if (updateRules) {
+      updateRules({ [key]: value });
+    } else if (setRules) {
+      // Backward fallback
+      setRules((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   return (

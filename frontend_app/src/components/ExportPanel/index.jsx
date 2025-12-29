@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { useAppState } from '../../context/AppStateContext';
-import { exportReport } from '../../services/reportService';
 
 /**
  * PUBLIC_INTERFACE
  * ExportPanel - Provides export/download actions for the generated report.
  */
 export default function ExportPanel() {
-  const { preview, exportExcel } = useAppState();
+  const { reportPreview, preview, exportExcel } = useAppState();
+  const current = reportPreview || preview || [];
   const [downloading, setDownloading] = useState(false);
-  const disabled = !preview || preview.length === 0 || downloading;
+  const disabled = !current || current.length === 0 || downloading;
 
   // PUBLIC_INTERFACE
   const onExport = async () => {
     setDownloading(true);
     try {
-      const url = exportExcel ? await exportExcel() : await exportReport(preview);
+      const url = await exportExcel();
       if (!url) return;
       const a = document.createElement('a');
       a.href = url;

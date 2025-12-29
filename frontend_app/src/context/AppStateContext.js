@@ -10,19 +10,19 @@ import {
  * PUBLIC_INTERFACE
  * AppStateProvider wraps the app and exposes shared state and actions.
  *
- * State:
- * - uploadedFiles: original data files uploaded by the user
- * - normalizedTasks: parsed/normalized task rows
- * - rules: rule configuration object for report generation
- * - preview: grouped report preview data
- * - loading: indicates async work in progress
- * - error: error message if any operation fails
+ * Exposed State (stable):
+ * - uploadedFiles: File[]
+ * - normalizedTasks: Task[]
+ * - rules: RuleConfig
+ * - reportPreview: ReportPreviewData
+ * - loading: boolean
+ * - error: string
  *
- * Actions:
- * - parseFile(fileList): parses files and updates uploadedFiles and normalizedTasks, also refreshes preview
- * - updateRules(partialRules): merges rule updates into the rules state and updates preview if tasks exist
- * - generatePreview(): transforms normalizedTasks using rules into preview
- * - exportExcel(): triggers mock export with current preview and returns a Blob URL
+ * Exposed Actions (stable):
+ * - parseFile(fileList: FileList|File[]): Promise<void>
+ * - updateRules(partialRules: Partial<RuleConfig>): void
+ * - generatePreview(): Promise<void>
+ * - exportExcel(): Promise<string|null>
  *
  * JSDoc typedefs are defined in src/types/index.js and referenced here:
  * @typedef {import('../types/index').Task} Task
@@ -44,7 +44,7 @@ export function AppStateProvider({ children }) {
     includeBlocked: true,
   });
   /** @type {[ReportPreviewData, React.Dispatch<React.SetStateAction<ReportPreviewData>>]} */
-  const [preview, setPreview] = useState([]);
+  const [reportPreview, setReportPreview] = useState([]);
   /** @type {[boolean, React.Dispatch<React.SetStateAction<boolean>>]} */
   const [loading, setLoading] = useState(false);
   /** @type {[string, React.Dispatch<React.SetStateAction<string>>]} */
@@ -67,7 +67,7 @@ export function AppStateProvider({ children }) {
       setNormalizedTasks(rows);
       // Update preview to keep UI in sync on upload
       const groups = await svcGeneratePreview(rows, rules);
-      setPreview(groups);
+      setReportPreview(groups);
     } catch (e) {
       setError('Failed to parse files.');
     } finally {
@@ -78,14 +78,14 @@ export function AppStateProvider({ children }) {
   /**
    * PUBLIC_INTERFACE
    * updateRules - Merge partial rule updates and regenerate preview if tasks exist.
-   * @param {Partial<RuleConfig>} partial
+   * @param {Partial<RuleConfig>} partialRules
    */
-  const updateRules = useCallback((partial) => {
+  const updateRules = useCallback((partialRules) => {
     setRules((prev) => {
-      const next = { ...prev, ...partial };
+      const next = { ...prev, ...partialRules };
       if (normalizedTasks && normalizedTasks.length > 0) {
         svcGeneratePreview(normalizedTasks, next)
-          .then(setPreview)
+          .then(setReportPreview)
           .catch(() => {});
       }
       return next;
@@ -102,7 +102,7 @@ export function AppStateProvider({ children }) {
     setLoading(true);
     try {
       const groups = await svcGeneratePreview(normalizedTasks || [], rules);
-      setPreview(groups);
+      setReportPreview(groups);
     } catch (e) {
       setError('Failed to generate preview.');
     } finally {
@@ -120,8 +120,8 @@ export function AppStateProvider({ children }) {
     setError('');
     setLoading(true);
     try {
-      if (!preview || preview.length === 0) return null;
-      const url = await svcExportReport(preview);
+      if (!reportPreview || reportPreview.length === 0) return null;
+      const url = await svcExportReport(reportPreview);
       return url;
     } catch (e) {
       setError('Failed to export report.');
@@ -129,21 +129,23 @@ export function AppStateProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [preview]);
+  }, [reportPreview]);
 
   const value = useMemo(
     () => ({
-      // State
+      // Stable state
       uploadedFiles,
-      setUploadedFiles, // backward compatibility for existing components
       normalizedTasks,
       rules,
-      setRules, // backward compatibility for RuleConfig
-      preview,
-      setPreview, // backward compatibility for Upload/Preview components
+      reportPreview,
       loading,
       error,
-      // Actions
+      // Backward compatibility setters for current components (will be removed later)
+      setUploadedFiles,
+      setRules,
+      setPreview: setReportPreview,
+      preview: reportPreview,
+      // Stable actions
       parseFile,
       updateRules,
       generatePreview,
@@ -153,7 +155,7 @@ export function AppStateProvider({ children }) {
       uploadedFiles,
       normalizedTasks,
       rules,
-      preview,
+      reportPreview,
       loading,
       error,
       parseFile,
