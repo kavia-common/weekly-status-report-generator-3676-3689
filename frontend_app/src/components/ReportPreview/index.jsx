@@ -6,8 +6,8 @@ import { useAppState } from '../../context/AppStateContext';
  * ReportPreview - Shows grouped preview data.
  */
 export default function ReportPreview() {
-  const { reportPreview, preview } = useAppState();
-  const data = reportPreview || preview || [];
+  const { reportPreview } = useAppState();
+  const data = reportPreview || [];
 
   return (
     <section className="op-section">

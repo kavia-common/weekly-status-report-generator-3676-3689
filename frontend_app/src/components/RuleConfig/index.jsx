@@ -4,19 +4,20 @@ import { useAppState } from '../../context/AppStateContext';
 /**
  * PUBLIC_INTERFACE
  * RuleConfig - Starter controls for rule configuration.
+ * @typedef {import('../../types').RuleConfig} RuleConfig
  */
 export default function RuleConfig() {
-  const { rules, updateRules, setRules } = useAppState();
+  const { rules, updateRules } = useAppState();
 
   const update = (key, value) => {
-    // Prefer stable action
-    if (updateRules) {
-      updateRules({ [key]: value });
-    } else if (setRules) {
-      // Backward fallback
-      setRules((prev) => ({ ...prev, [key]: value }));
-    }
+    updateRules?.({ [key]: value });
   };
+
+  const current = rules || /** @type {RuleConfig} */ ({
+    grouping: 'assignee',
+    timeframe: 'last_week',
+    includeBlocked: true,
+  });
 
   return (
     <section className="op-section">
@@ -28,7 +29,7 @@ export default function RuleConfig() {
           <div style={{ fontSize: 12, color: 'var(--op-muted)', marginBottom: 4 }}>Grouping</div>
           <select
             className="op-input"
-            value={rules.grouping}
+            value={current.grouping}
             onChange={(e) => update('grouping', e.target.value)}
           >
             <option value="assignee">By Assignee</option>
@@ -40,7 +41,7 @@ export default function RuleConfig() {
           <div style={{ fontSize: 12, color: 'var(--op-muted)', marginBottom: 4 }}>Timeframe</div>
           <select
             className="op-input"
-            value={rules.timeframe}
+            value={current.timeframe}
             onChange={(e) => update('timeframe', e.target.value)}
           >
             <option value="last_week">Last Week</option>
@@ -51,7 +52,7 @@ export default function RuleConfig() {
         <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
             type="checkbox"
-            checked={!!rules.includeBlocked}
+            checked={!!current.includeBlocked}
             onChange={(e) => update('includeBlocked', e.target.checked)}
           />
           <span>Include Blocked Tasks</span>

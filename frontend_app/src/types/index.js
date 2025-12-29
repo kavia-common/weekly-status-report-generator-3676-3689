@@ -51,10 +51,18 @@
  * @typedef {ReportPreviewGroup[]} ReportPreviewData
  */
 
-// Fake exports for tooling discoverability in JS projects.
-// These do not emit runtime exports but help IDEs track symbols.
-/** @type {null} */ export const __Task = null;
-/** @type {null} */ export const __RuleConfig = null;
-/** @type {null} */ export const __ReportPreviewItem = null;
-/** @type {null} */ export const __ReportPreviewGroup = null;
-/** @type {null} */ export const __ReportPreviewData = null;
+/**
+ * PUBLIC_INTERFACE
+ * These runtime no-op exports exist solely so that IDEs and tooling can import
+ * the typedef names from this module in JS projects.
+ */
+// eslint-disable-next-line no-unused-vars
+export const Task = undefined;
+// eslint-disable-next-line no-unused-vars
+export const RuleConfig = undefined;
+// eslint-disable-next-line no-unused-vars
+export const ReportPreviewItem = undefined;
+// eslint-disable-next-line no-unused-vars
+export const ReportPreviewGroup = undefined;
+// eslint-disable-next-line no-unused-vars
+export const ReportPreviewData = undefined;

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
-import '../types/index.js';
 import {
   parseFiles as svcParseFiles,
   generatePreview as svcGeneratePreview,
@@ -25,9 +24,9 @@ import {
  * - exportExcel(): Promise<string|null>
  *
  * JSDoc typedefs are defined in src/types/index.js and referenced here:
- * @typedef {import('../types/index').Task} Task
- * @typedef {import('../types/index').RuleConfig} RuleConfig
- * @typedef {import('../types/index').ReportPreviewData} ReportPreviewData
+ * @typedef {import('../types').Task} Task
+ * @typedef {import('../types').RuleConfig} RuleConfig
+ * @typedef {import('../types').ReportPreviewData} ReportPreviewData
  */
 const AppStateContext = createContext(null);
 

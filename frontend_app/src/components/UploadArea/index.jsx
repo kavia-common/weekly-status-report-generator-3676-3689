@@ -4,6 +4,7 @@ import { useAppState } from '../../context/AppStateContext';
 /**
  * PUBLIC_INTERFACE
  * UploadArea - Allows selecting CSV/Jira export files and parses them via service.
+ * @typedef {import('../../types').Task} Task
  */
 export default function UploadArea() {
   // Use stable action; keep no direct service usage here.

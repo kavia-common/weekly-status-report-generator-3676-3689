@@ -4,7 +4,7 @@ const API_BASE = process.env.REACT_APP_API_BASE || process.env.REACT_APP_BACKEND
  * PUBLIC_INTERFACE
  * parseFiles - mock parse CSV/Jira export files into normalized rows.
  * @param {File[]} files
- * @returns {Promise<Array<object>>}
+ * @returns {Promise<import('../types').Task[]>}
  */
 export async function parseFiles(files) {
   // Mocked delay and sample data
@@ -18,9 +18,9 @@ export async function parseFiles(files) {
 /**
  * PUBLIC_INTERFACE
  * generatePreview - mock transformation of parsed rows with applied rules.
- * @param {Array<object>} rows
- * @param {Record<string, any>} rules
- * @returns {Promise<Array<object>>}
+ * @param {import('../types').Task[]} rows
+ * @param {import('../types').RuleConfig} rules
+ * @returns {Promise<import('../types').ReportPreviewData>}
  */
 export async function generatePreview(rows, rules) {
   await new Promise((r) => setTimeout(r, 200));
@@ -40,7 +40,7 @@ export async function generatePreview(rows, rules) {
  * PUBLIC_INTERFACE
  * exportReport - mock export action that would call backend to produce Excel.
  * Returns a Blob URL or triggers download client-side in future.
- * @param {Array<object>} previewData
+ * @param {import('../types').ReportPreviewData} previewData
  * @returns {Promise<string>} blob URL to download
  */
 export async function exportReport(previewData) {

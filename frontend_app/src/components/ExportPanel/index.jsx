@@ -6,8 +6,8 @@ import { useAppState } from '../../context/AppStateContext';
  * ExportPanel - Provides export/download actions for the generated report.
  */
 export default function ExportPanel() {
-  const { reportPreview, preview, exportExcel } = useAppState();
-  const current = reportPreview || preview || [];
+  const { reportPreview, exportExcel } = useAppState();
+  const current = reportPreview || [];
   const [downloading, setDownloading] = useState(false);
   const disabled = !current || current.length === 0 || downloading;
 
