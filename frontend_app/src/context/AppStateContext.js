@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
 import '../types/index.js';
-import { parseFiles, generatePreview as svcGeneratePreview, exportReport as svcExportReport } from '../services/reportService';
+import {
+  parseFiles as svcParseFiles,
+  generatePreview as svcGeneratePreview,
+  exportReport as svcExportReport,
+} from '../services/reportService';
 
 /**
  * PUBLIC_INTERFACE
- * AppStateProvider wraps the app and exposes shared state and actions:
+ * AppStateProvider wraps the app and exposes shared state and actions.
  *
  * State:
  * - uploadedFiles: original data files uploaded by the user
@@ -15,10 +19,10 @@ import { parseFiles, generatePreview as svcGeneratePreview, exportReport as svcE
  * - error: error message if any operation fails
  *
  * Actions:
- * - parseFile(fileList): parses files and updates uploadedFiles and normalizedTasks
- * - updateRules(partialRules): merges rule updates into the rules state
+ * - parseFile(fileList): parses files and updates uploadedFiles and normalizedTasks, also refreshes preview
+ * - updateRules(partialRules): merges rule updates into the rules state and updates preview if tasks exist
  * - generatePreview(): transforms normalizedTasks using rules into preview
- * - exportExcel(): triggers mock export with current preview
+ * - exportExcel(): triggers mock export with current preview and returns a Blob URL
  *
  * JSDoc typedefs are defined in src/types/index.js and referenced here:
  * @typedef {import('../types/index').Task} Task
@@ -59,9 +63,9 @@ export function AppStateProvider({ children }) {
       const files = Array.from(fileList || []);
       setUploadedFiles(files);
       /** @type {Task[]} */
-      const rows = await parseFiles(files);
+      const rows = await svcParseFiles(files);
       setNormalizedTasks(rows);
-      // Keep existing components working by also updating preview here
+      // Update preview to keep UI in sync on upload
       const groups = await svcGeneratePreview(rows, rules);
       setPreview(groups);
     } catch (e) {
@@ -73,15 +77,16 @@ export function AppStateProvider({ children }) {
 
   /**
    * PUBLIC_INTERFACE
-   * updateRules - Merge partial rule updates and optionally regenerate preview.
+   * updateRules - Merge partial rule updates and regenerate preview if tasks exist.
    * @param {Partial<RuleConfig>} partial
    */
   const updateRules = useCallback((partial) => {
     setRules((prev) => {
       const next = { ...prev, ...partial };
-      // Optimistically regenerate preview if tasks exist
       if (normalizedTasks && normalizedTasks.length > 0) {
-        svcGeneratePreview(normalizedTasks, next).then(setPreview).catch(() => {});
+        svcGeneratePreview(normalizedTasks, next)
+          .then(setPreview)
+          .catch(() => {});
       }
       return next;
     });
@@ -130,12 +135,12 @@ export function AppStateProvider({ children }) {
     () => ({
       // State
       uploadedFiles,
-      setUploadedFiles, // kept for backward compatibility
+      setUploadedFiles, // backward compatibility for existing components
       normalizedTasks,
       rules,
-      setRules, // kept for backward compatibility with RuleConfig
+      setRules, // backward compatibility for RuleConfig
       preview,
-      setPreview, // kept for backward compatibility with Upload/Preview components
+      setPreview, // backward compatibility for Upload/Preview components
       loading,
       error,
       // Actions

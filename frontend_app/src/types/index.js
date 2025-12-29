@@ -1,9 +1,11 @@
-//
-// Shared JSDoc typedefs for the Weekly Status Report Generator.
-// Import this file where type references are needed via JSDoc comments.
-//
-// PUBLIC_INTERFACE
 /**
+ * Shared JSDoc typedefs for the Weekly Status Report Generator.
+ * Import this file where type references are needed via JSDoc comments.
+ * This file defines the stable, public shape of core data structures used
+ * across components and the app state context.
+ */
+/**
+ * PUBLIC_INTERFACE
  * @typedef {Object} Task
  * @property {string} id - Unique task identifier (e.g., JIRA key).
  * @property {string} assignee - Person responsible for the task.
@@ -15,6 +17,7 @@
 /**
  * PUBLIC_INTERFACE
  * RuleConfig defines how reports should be generated.
+ * Maintain this as the stable public interface for rule settings.
  * @typedef {Object} RuleConfig
  * @property {"assignee"|"status"} grouping - Field to group tasks by.
  * @property {"last_week"|"this_week"} timeframe - Which time window to include.
@@ -43,5 +46,6 @@
 /**
  * PUBLIC_INTERFACE
  * ReportPreviewData is a list of grouped preview data.
+ * This is the type used by the AppStateContext 'preview' value.
  * @typedef {ReportPreviewGroup[]} ReportPreviewData
  */
