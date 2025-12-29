@@ -7,7 +7,7 @@ import { exportReport } from '../../services/reportService';
  * ExportPanel - Provides export/download actions for the generated report.
  */
 export default function ExportPanel() {
-  const { preview } = useAppState();
+  const { preview, exportExcel } = useAppState();
   const [downloading, setDownloading] = useState(false);
   const disabled = !preview || preview.length === 0 || downloading;
 
@@ -15,7 +15,8 @@ export default function ExportPanel() {
   const onExport = async () => {
     setDownloading(true);
     try {
-      const url = await exportReport(preview);
+      const url = exportExcel ? await exportExcel() : await exportReport(preview);
+      if (!url) return;
       const a = document.createElement('a');
       a.href = url;
       a.download = `weekly-status-report_${new Date().toISOString().slice(0, 10)}.txt`;
