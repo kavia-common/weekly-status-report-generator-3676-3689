@@ -1,0 +1,132 @@
+:root {
+  /* Ocean Professional Theme */
+  --op-primary: #2563EB;   /* Blue */
+  --op-secondary: #F59E0B; /* Amber */
+  --op-success: #10B981;   /* Emerald for positive states */
+  --op-error: #EF4444;     /* Red */
+  --op-background: #f9fafb;
+  --op-surface: #ffffff;
+  --op-text: #111827;
+
+  --op-border: #e5e7eb;
+  --op-muted: #6b7280;
+
+  --op-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+
+  --op-radius: 12px;
+
+  /* Elevation */
+  --op-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --op-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Gradients */
+  --op-gradient: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 250, 251, 1));
+}
+
+/* Base utilities */
+.op-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.op-section {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: var(--op-radius);
+  box-shadow: var(--op-shadow-sm);
+  padding: 16px;
+}
+
+.op-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 992px) {
+  .op-grid {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.op-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--op-text);
+  margin: 0 0 8px;
+}
+
+.op-subtitle {
+  font-size: 14px;
+  color: var(--op-muted);
+  margin: 0 0 16px;
+}
+
+.op-btn {
+  appearance: none;
+  border: none;
+  background: var(--op-primary);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--op-shadow-sm);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.op-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--op-shadow-md);
+  opacity: 0.95;
+}
+
+.op-btn.secondary {
+  background: var(--op-secondary);
+  color: #1f2937;
+}
+
+.op-card {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.op-input {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--op-border);
+  padding: 10px 12px;
+  background: white;
+  color: var(--op-text);
+}
+
+.op-file {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 2px dashed var(--op-border);
+  padding: 16px;
+  background: #fff;
+  color: var(--op-muted);
+  text-align: center;
+}
+
+.op-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.op-spacer {
+  flex: 1;
+}
+
+.op-divider {
+  height: 1px;
+  background: var(--op-border);
+  margin: 12px 0;
+}
