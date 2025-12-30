@@ -11,3 +11,27 @@ T-209,Optimize DB indexes,Ian,Done,7,Sprint 34,Platform Foundation,2025-12-01,20
 T-210,Add SSO with SAML,Julia,To Do,0,Sprint 34,Auth & Onboarding,2025-12-07,2025-12-12,
 T-211,Customer feedback parsing,Karen,In Progress,2,Sprint 34,Insights & Research,2025-12-03,2025-12-09,
 T-212,Finalize release notes,Liam,Done,1,Sprint 34,Release Management,2025-12-05,2025-12-06,2025-12-06
+T-213,Implement MFA enrollment,Alice,In Review,6,Sprint 35,Auth & Onboarding,2025-12-08,2025-12-13,
+T-214,Improve error messages,Bob,Done,3,Sprint 35,UX Polish,2025-12-09,2025-12-11,2025-12-11
+T-215,Add PDF export presets,Charlie,To Do,0,Sprint 35,Exports Enhancements,2025-12-10,2025-12-16,
+T-216,Set up Blue/Green deploy,Diana,In Progress,4,Sprint 35,Deployment Pipeline,2025-12-08,2025-12-15,
+T-217,Table virtualization for tasks,Ethan,Blocked,1,Sprint 35,UI Performance,2025-12-09,2025-12-14,
+T-218,Contract tests for billing,Fiona,In Review,5,Sprint 35,Quality Initiative,2025-12-10,2025-12-13,
+T-219,Webhook retry policy,George,Done,4,Sprint 35,Integrations Reliability,2025-12-08,2025-12-12,2025-12-12
+T-220,Color contrast improvements,Helen,Done,2,Sprint 35,UI/UX Compliance,2025-12-09,2025-12-10,2025-12-10
+T-221,Partition large tables,Ian,In Progress,6,Sprint 35,Platform Foundation,2025-12-08,2025-12-16,
+T-222,Okta SSO validation,Julia,Blocked,1,Sprint 35,Auth & Onboarding,2025-12-11,2025-12-16,
+T-223,Build NPS dashboard,Karen,To Do,0,Sprint 35,Insights & Research,2025-12-12,2025-12-18,
+T-224,Create release checklist,Liam,In Review,2,Sprint 35,Release Management,2025-12-09,2025-12-13,
+T-225,Add dark mode toggle,Alice,Done,3,Sprint 36,Theming,2025-12-15,2025-12-17,2025-12-16
+T-226,Refactor auth middleware,Bob,In Progress,5,Sprint 36,Platform Hardening,2025-12-14,2025-12-20,
+T-227,Async export queue,Charlie,In Review,8,Sprint 36,Exports Enhancements,2025-12-15,2025-12-22,
+T-228,Fix invoice rounding bug,Diana,Done,2,Sprint 36,Billing Stability,2025-12-16,2025-12-17,2025-12-17
+T-229,Virtual list polish,Ethan,To Do,0,Sprint 36,UI Performance,2025-12-15,2025-12-21,
+T-230,Add API contract coverage,Fiona,In Progress,4,Sprint 36,Quality Initiative,2025-12-14,2025-12-19,
+T-231,Analytics SDK consent,George,In Review,3,Sprint 36,Growth Analytics,2025-12-16,2025-12-20,
+T-232,Keyboard navigation fixes,Helen,Done,2,Sprint 36,UI/UX Compliance,2025-12-15,2025-12-16,2025-12-16
+T-233,Rebuild read replicas,Ian,Blocked,1,Sprint 36,Platform Foundation,2025-12-15,2025-12-22,
+T-234,SCIM user sync,Julia,To Do,0,Sprint 36,Auth & Onboarding,2025-12-17,2025-12-23,
+T-235,Usability testing synth,Karen,In Progress,3,Sprint 36,Insights & Research,2025-12-15,2025-12-21,
+T-236,Tag release v1.3.0,Liam,Done,1,Sprint 36,Release Management,2025-12-18,2025-12-18,2025-12-18
