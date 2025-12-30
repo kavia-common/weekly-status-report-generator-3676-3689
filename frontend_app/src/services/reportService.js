@@ -86,3 +86,33 @@ export async function exportReport(previewData, options = {}) {
   // Note: caller is responsible for setting the anchor download attribute using their computed filename
   return url;
 }
+
+/**
+ * PUBLIC_INTERFACE
+ * formatBytes - Small helper to format bytes to human-readable string.
+ * @param {number} bytes
+ * @returns {string}
+ */
+export function formatBytes(bytes = 0) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+/**
+ * PUBLIC_INTERFACE
+ * isFileTypeSupported - Check if a File is CSV or XLSX by MIME or extension.
+ * @param {File} file
+ * @returns {boolean}
+ */
+export function isFileTypeSupported(file) {
+  if (!file) return false;
+  const accepted = [
+    'text/csv',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  ];
+  if (file.type && accepted.includes(file.type)) return true;
+  const name = (file.name || '').toLowerCase();
+  return name.endsWith('.csv') || name.endsWith('.xlsx');
+}
