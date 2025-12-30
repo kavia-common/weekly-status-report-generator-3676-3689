@@ -9,6 +9,12 @@ body {
   background: #f9fafb;
   font-size: 16px;
   line-height: 1.5;
+  overflow-wrap: anywhere; /* global safeguard against overflow */
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
 }
 
 code {

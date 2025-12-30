@@ -197,21 +197,122 @@
 .op-file {
   display: block;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border-radius: 12px;
   border: 2px dashed rgba(255,255,255,0.65);
   padding: var(--space-6);
   background: var(--brand-gradient);
   color: #ffffff;
   text-align: center;
+  overflow-wrap: anywhere; /* prevent overly long text pushing width */
 }
 .op-file .op-btn {
   /* Button on gradient stays readable */
   background: #ffffff;
   color: #111827;
+  max-width: 100%;
 }
 .op-file.is-focus {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
+}
+
+/* Dropzone container utility to constrain content */
+.op-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+/* General card container hardening */
+.op-card {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 10px;
+  padding: var(--space-4);
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* prevent inner overflow bleed */
+}
+
+/* Prevent images/icons from exceeding container */
+.op-card img,
+.op-file img,
+.op-card svg,
+.op-file svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Toolbar wrapping to avoid pushing width */
+.op-toolbar {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Truncate long filenames and inline chips within metadata rows */
+.op-ellipsis,
+.op-filemeta {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Allow multi-line safe wrapping for code/details blocks */
+.op-prewrap {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Section responsiveness and safe height constraints for long lists */
+.op-section {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: var(--op-radius);
+  box-shadow: var(--op-shadow-sm);
+  padding: var(--space-5);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Constrain variable-height containers with graceful scroll */
+.op-scroll-y {
+  overflow-y: auto;
+}
+.op-maxh-40vh { max-height: 40vh; }
+.op-maxh-50vh { max-height: 50vh; }
+.op-minh-120 { min-height: 120px; }
+
+/* Responsive tweaks for very small widths */
+@media (max-width: 420px) {
+  .op-file {
+    padding: var(--space-5);
+  }
+  .op-toolbar {
+    gap: var(--space-2);
+  }
+}
+
+@media (max-width: 360px) {
+  .op-file {
+    padding: var(--space-4);
+  }
+  .op-btn {
+    padding: 8px 12px;
+  }
 }
 
 /* Toolbar and layout helpers */

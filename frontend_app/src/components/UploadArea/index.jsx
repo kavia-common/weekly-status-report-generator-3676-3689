@@ -242,16 +242,18 @@ export default function UploadArea() {
         aria-label="Upload area: drag and drop or press Enter to browse"
         aria-describedby="upload-help upload-hint"
       >
-        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-          {dragOver ? 'Drop the file to upload' : 'Drag & drop your file here'}
-        </div>
-        <div className="op-status" style={{ color: '#fff', opacity: 0.9, marginBottom: 12 }}>
-          or
-        </div>
-        <div>
-          <button className="op-btn" type="button" onClick={onBrowseClick} aria-label="Browse for a file">
-            Browse
-          </button>
+        <div className="op-dropzone">
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, maxWidth: '100%' }}>
+            {dragOver ? 'Drop the file to upload' : 'Drag & drop your file here'}
+          </div>
+          <div className="op-status" style={{ color: '#fff', opacity: 0.9, marginBottom: 12 }}>
+            or
+          </div>
+          <div>
+            <button className="op-btn" type="button" onClick={onBrowseClick} aria-label="Browse for a file">
+              Browse
+            </button>
+          </div>
         </div>
 
         <p id="upload-help" className="sr-only">
@@ -272,8 +274,8 @@ export default function UploadArea() {
       </div>
 
       {/* Helper text under drop area */}
-      <div className="op-toolbar" style={{ marginTop: 8, alignItems: 'flex-start' }}>
-        <span className="op-status" aria-live="polite">
+      <div className="op-toolbar" style={{ marginTop: 8, alignItems: 'flex-start', maxWidth: '100%' }}>
+        <span className="op-status op-ellipsis" aria-live="polite" style={{ maxWidth: '100%' }}>
           {isProcessing ? 'Processing…' : (statusMessage || localStatus || 'Idle')}
         </span>
         <div className="op-spacer" />
@@ -287,13 +289,15 @@ export default function UploadArea() {
           Use sample file
         </a>
       </div>
-      <div className="op-status" style={{ marginTop: 4 }}>{helperText}</div>
+      <div className="op-status op-ellipsis" style={{ marginTop: 4, maxWidth: '100%' }}>{helperText}</div>
 
       {/* Selected file meta and actions */}
       {selectedFile && (
         <div className="op-card" style={{ marginTop: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <div style={{ fontWeight: 600 }}>{selectedFile.name}</div>
+            <div className="op-filemeta op-ellipsis" style={{ fontWeight: 600, maxWidth: '100%' }} title={selectedFile.name}>
+              {selectedFile.name}
+            </div>
             <div className="op-status">• {formatSize(selectedFile.size)}</div>
             <div className="op-status">
               • Last modified {new Date(selectedFile.lastModified).toLocaleString()}
@@ -319,7 +323,7 @@ export default function UploadArea() {
             </button>
           </div>
           {isProcessing && (
-            <div className="op-status" role="status" aria-live="polite" style={{ marginTop: 8 }}>
+            <div className="op-status op-scroll-y op-maxh-40vh" role="status" aria-live="polite" style={{ marginTop: 8 }}>
               Processing… please wait
             </div>
           )}
@@ -361,13 +365,12 @@ export default function UploadArea() {
           {showErrorDetails && (
             <pre
               id="upload-error-details"
+              className="op-prewrap op-scroll-y op-maxh-50vh"
               style={{
                 marginTop: 8,
                 background: '#0f172a0d',
                 borderRadius: 8,
                 padding: 8,
-                overflowX: 'auto',
-                whiteSpace: 'pre-wrap',
               }}
             >
 {String(errorText)}
