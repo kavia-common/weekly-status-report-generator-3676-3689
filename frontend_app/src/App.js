@@ -7,12 +7,41 @@ import RuleConfig from './components/RuleConfig';
 import ReportPreview from './components/ReportPreview';
 import ExportPanel from './components/ExportPanel';
 import { TourProvider } from './tour/TourProvider';
+import useTour from './tour/useTour';
 import './styles/tour.css';
 
 /**
  * PUBLIC_INTERFACE
  * App - Root component wiring provider and all feature sections.
  */
+function HeaderStartTourButton() {
+  // PUBLIC_INTERFACE
+  /**
+   * Accessible Start Tour button that uses the TourProvider context.
+   * Renders nothing if TourProvider is not available to avoid runtime errors.
+   */
+  try {
+    const tour = useTour();
+    if (!tour) return null;
+    const label = tour.completed ? 'Replay onboarding tour' : 'Start onboarding tour';
+    return (
+      <button
+        className="op-btn secondary"
+        type="button"
+        onClick={() => tour.resetAndStart?.() || tour.start?.()}
+        aria-label={label}
+        title={label}
+        style={{ height: 40 }}
+      >
+        {tour.completed ? 'Replay Tour' : 'Start Tour'}
+      </button>
+    );
+  } catch {
+    // TourProvider not mounted; render nothing
+    return null;
+  }
+}
+
 function App() {
   const [theme, setTheme] = useState('light');
 
@@ -51,6 +80,8 @@ function App() {
                 >
                   {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                 </button>
+                {/* Header Start Tour button placed next to theme toggle */}
+                <HeaderStartTourButton />
               </div>
             </div>
           </div>
