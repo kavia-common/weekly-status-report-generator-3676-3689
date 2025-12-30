@@ -246,7 +246,7 @@ export default function UploadArea() {
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, maxWidth: '100%' }}>
             {dragOver ? 'Drop the file to upload' : 'Drag & drop your file here'}
           </div>
-          <div className="op-status" style={{ color: '#fff', opacity: 0.9, marginBottom: 12 }}>
+          <div className="op-status" style={{ opacity: 0.9, marginBottom: 12 }}>
             or
           </div>
           <div>
