@@ -7,6 +7,12 @@ import { useAppState } from '../../context/AppStateContext';
  */
 export default function ExportPanel() {
   const { reportPreview, exportExcel, loading, error, statusMessage } = useAppState();
+  // Lazy import of tour to avoid circulars
+  let tour = null;
+  try {
+    // eslint-disable-next-line global-require
+    tour = require('../../tour/useTour').default?.() || null;
+  } catch { /* tour not mounted */ }
   const current = reportPreview || [];
   const [downloading, setDownloading] = useState(false);
   const disabled = !current || current.length === 0 || downloading || loading;
@@ -32,7 +38,7 @@ export default function ExportPanel() {
   const hasData = current && current.length > 0;
 
   return (
-    <section className="op-section" aria-labelledby="export-title" aria-describedby="export-desc">
+    <section className="op-section" aria-labelledby="export-title" aria-describedby="export-desc" data-tour-id="export">
       <h2 id="export-title" className="op-title">Export</h2>
       <p id="export-desc" className="op-subtitle">Download your weekly status report.</p>
 
@@ -57,6 +63,14 @@ export default function ExportPanel() {
           Back to Top
         </button>
         <div className="op-spacer" />
+        <button
+          className="op-btn secondary"
+          type="button"
+          aria-label="Start onboarding tour"
+          onClick={() => tour?.resetAndStart?.() || tour?.start?.()}
+        >
+          {tour?.completed ? 'Replay Tour' : 'Start Tour'}
+        </button>
         <span className={`op-status${error ? ' error' : ''}`} aria-live="polite">
           {loading ? 'Working…' : (error || statusMessage)}
         </span>

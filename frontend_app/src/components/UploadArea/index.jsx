@@ -44,7 +44,7 @@ export default function UploadArea() {
   const onDragOver = (e) => e.preventDefault();
 
   return (
-    <section className="op-section" aria-labelledby="upload-title" aria-describedby="upload-desc">
+    <section className="op-section" aria-labelledby="upload-title" aria-describedby="upload-desc" data-tour-id="upload">
       <h2 id="upload-title" className="op-title">Upload Data</h2>
       <p id="upload-desc" className="op-subtitle">Upload CSV or Jira export files to begin.</p>
 

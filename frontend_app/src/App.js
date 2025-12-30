@@ -6,6 +6,8 @@ import UploadArea from './components/UploadArea';
 import RuleConfig from './components/RuleConfig';
 import ReportPreview from './components/ReportPreview';
 import ExportPanel from './components/ExportPanel';
+import { TourProvider } from './tour/TourProvider';
+import './styles/tour.css';
 
 /**
  * PUBLIC_INTERFACE
@@ -27,29 +29,48 @@ function App() {
     <div className="App" style={{ background: 'var(--op-background)' }}>
       <a href="#main" className="skip-link">Skip to content</a>
 
-      <header className="App-header" style={{ background: 'transparent', minHeight: 'auto' }} role="banner">
-        <div className="op-container" style={{ paddingTop: 24, paddingBottom: 8 }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            marginBottom: 16,
-            justifyContent: 'space-between'
-          }}>
-            <div>
-              <h1 style={{ margin: 0, color: 'var(--op-text)' }}>Weekly Status Report Generator</h1>
-              <p className="op-status" aria-live="polite" id="app-subtitle">Upload • Configure • Preview • Export</p>
+      <TourProvider>
+        <header className="App-header" style={{ background: 'transparent', minHeight: 'auto' }} role="banner">
+          <div className="op-container" style={{ paddingTop: 24, paddingBottom: 8 }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              marginBottom: 16,
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h1 style={{ margin: 0, color: 'var(--op-text)' }}>Weekly Status Report Generator</h1>
+                <p className="op-status" aria-live="polite" id="app-subtitle">Upload • Configure • Preview • Export</p>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  className="op-btn secondary"
+                  onClick={() => {
+                    try {
+                      // eslint-disable-next-line global-require
+                      const tour = require('./tour/useTour').default?.();
+                      tour?.resetAndStart?.() || tour?.start?.();
+                    } catch {
+                      // no-op if tour not yet mounted
+                    }
+                  }}
+                  aria-label="Start onboarding tour"
+                  type="button"
+                >
+                  Start Tour
+                </button>
+                <button
+                  className="theme-toggle"
+                  onClick={toggleTheme}
+                  aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                >
+                  {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+                </button>
+              </div>
             </div>
-            <button
-              className="theme-toggle"
-              onClick={toggleTheme}
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            >
-              {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-            </button>
           </div>
-        </div>
-      </header>
+        </header>
 
       <main id="main" className="op-container" role="main" tabIndex={-1}>
         <AppStateProvider>
@@ -71,6 +92,7 @@ function App() {
           </div>
         </AppStateProvider>
       </main>
+      </TourProvider>
     </div>
   );
 }

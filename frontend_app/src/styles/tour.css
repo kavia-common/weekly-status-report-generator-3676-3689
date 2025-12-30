@@ -1,0 +1,112 @@
+.op-tour {
+  position: fixed;
+  z-index: 1000;
+  max-width: 320px;
+  background: var(--op-surface);
+  color: var(--op-text);
+  border: 1px solid var(--op-border);
+  border-radius: 12px;
+  box-shadow: var(--op-shadow-md);
+  padding: 12px 12px 10px 12px;
+  transform: translateY(-2px);
+  opacity: 0;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+.op-tour.enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.op-tour-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.op-tour-step {
+  font-size: var(--step--1);
+  color: var(--op-muted);
+}
+
+.op-tour-close {
+  appearance: none;
+  border: 2px solid transparent;
+  background: transparent;
+  color: var(--op-muted);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.op-tour-close:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+  box-shadow: var(--op-ring);
+}
+
+.op-tour-title {
+  margin: 4px 0 6px 0;
+  font-size: var(--step-1);
+  font-weight: 700;
+}
+
+.op-tour-content {
+  margin: 0 0 10px 0;
+  font-size: var(--step--1);
+  color: var(--op-muted);
+}
+
+.op-tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.op-tour-overlay {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgba(17,24,39,0.35);
+}
+
+.op-tour-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--op-surface);
+  border-left: 1px solid var(--op-border);
+  border-top: 1px solid var(--op-border);
+  transform: rotate(45deg);
+}
+
+/* placement adjustments */
+.op-tour-arrow.bottom {
+  top: -6px;
+  left: 24px;
+}
+.op-tour-arrow.top {
+  bottom: -6px;
+  left: 24px;
+  transform: rotate(225deg);
+}
+.op-tour-arrow.right {
+  left: -6px;
+  top: 24px;
+  transform: rotate(315deg);
+}
+.op-tour-arrow.left {
+  right: -6px;
+  top: 24px;
+  transform: rotate(135deg);
+}
+
+.op-tour-anchorhint {
+  font-size: 11px;
+  color: var(--op-muted);
+  opacity: 0.7;
+}

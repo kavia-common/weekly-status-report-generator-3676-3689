@@ -20,7 +20,7 @@ export default function RuleConfig() {
   });
 
   return (
-    <section className="op-section" aria-labelledby="rules-title" aria-describedby="rules-desc">
+    <section className="op-section" aria-labelledby="rules-title" aria-describedby="rules-desc" data-tour-id="rules">
       <h2 id="rules-title" className="op-title">Rule Configuration</h2>
       <p id="rules-desc" className="op-subtitle">Adjust how your weekly report is generated.</p>
 

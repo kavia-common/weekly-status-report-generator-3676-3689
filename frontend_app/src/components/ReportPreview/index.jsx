@@ -10,7 +10,7 @@ export default function ReportPreview() {
   const data = reportPreview || [];
 
   return (
-    <section className="op-section" aria-labelledby="preview-title" aria-describedby="preview-desc">
+    <section className="op-section" aria-labelledby="preview-title" aria-describedby="preview-desc" data-tour-id="preview">
       <h2 id="preview-title" className="op-title">Report Preview</h2>
       <p id="preview-desc" className="op-subtitle">A quick look at how your report will be structured.</p>
 
