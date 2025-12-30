@@ -174,7 +174,10 @@ export default function UploadArea() {
   };
 
   const onUseSample = async (e) => {
-    e.preventDefault();
+    // Ensure this never bubbles to any click handlers that might trigger the file picker
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+
     setLocalError('');
     setShowErrorDetails(false);
     setLocalStatus('Loading sample…');
@@ -182,7 +185,7 @@ export default function UploadArea() {
 
     try {
       await loadSampleData();
-      // Set a synthetic selection indicator for UI purposes
+      // Set a synthetic selection indicator for UI purposes only
       setSelectedFile({
         name: 'Sample data',
         size: 0,

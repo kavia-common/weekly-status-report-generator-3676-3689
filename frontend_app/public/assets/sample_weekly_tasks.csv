@@ -1,0 +1,13 @@
+ID,Summary,Assignee,Status,Hours,Sprint,Epic,Start Date,Due Date,Completed Date
+T-201,Design database schema,Alice,Done,6,Sprint 34,Platform Foundation,2025-12-01,2025-12-03,2025-12-03
+T-202,Implement user registration,Bob,In Progress,5,Sprint 34,Auth & Onboarding,2025-12-02,2025-12-06,
+T-203,Create CI pipeline,Charlie,In Review,4,Sprint 34,DevOps Enablement,2025-12-03,2025-12-05,
+T-204,Fix payment retry bug,Diana,To Do,0,Sprint 34,Billing Stability,2025-12-06,2025-12-10,
+T-205,Refactor task list rendering,Ethan,In Progress,3,Sprint 34,UI Performance,2025-12-02,2025-12-07,
+T-206,Write unit tests for API,Fiona,Done,5,Sprint 34,Quality Initiative,2025-12-01,2025-12-04,2025-12-04
+T-207,Integrate analytics SDK,George,Blocked,1,Sprint 34,Growth Analytics,2025-12-04,2025-12-09,
+T-208,Accessibility audit fixes,Helen,In Review,2,Sprint 34,UI/UX Compliance,2025-12-03,2025-12-08,
+T-209,Optimize DB indexes,Ian,Done,7,Sprint 34,Platform Foundation,2025-12-01,2025-12-05,2025-12-05
+T-210,Add SSO with SAML,Julia,To Do,0,Sprint 34,Auth & Onboarding,2025-12-07,2025-12-12,
+T-211,Customer feedback parsing,Karen,In Progress,2,Sprint 34,Insights & Research,2025-12-03,2025-12-09,
+T-212,Finalize release notes,Liam,Done,1,Sprint 34,Release Management,2025-12-05,2025-12-06,2025-12-06
