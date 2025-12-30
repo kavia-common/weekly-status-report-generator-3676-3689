@@ -103,7 +103,7 @@ function App() {
             {/* Full-width below: Preview with density toggle */}
             <section aria-labelledby="preview-title-wrap">
               <h2 id="preview-title-wrap" className="sr-only">Report Preview</h2>
-              <div className="op-section">
+              <div className="op-section report-wrapper">
                 <div className="op-toolbar" style={{ marginBottom: 8 }}>
                   <h3 className="op-title" style={{ margin: 0 }}>Report Preview</h3>
                   <div className="op-spacer" />

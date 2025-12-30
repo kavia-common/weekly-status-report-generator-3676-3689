@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { buildExportBaseName } from '../../services/reportService';
 
 /**
  * PUBLIC_INTERFACE
  * ExportPanel - Provides export/download actions for the generated report.
  */
 export default function ExportPanel() {
-  const { reportPreview, exportExcel, loading, error, statusMessage } = useAppState();
+  const { reportPreview, exportExcel, loading, error, statusMessage, rules } = useAppState();
   const current = reportPreview || [];
   const [downloading, setDownloading] = useState(false);
   const disabled = !current || current.length === 0 || downloading || loading;
+
+  const deriveTeamOrProject = () => {
+    // Try to infer from rules or preview groups; fallback to "Project"
+    const fromRules = rules?.projectName || rules?.teamName || '';
+    if (fromRules && String(fromRules).trim().length > 0) return String(fromRules).trim();
+    // Attempt from first group label if grouping by assignee or status
+    const firstGroup = current?.[0]?.group;
+    if (firstGroup && typeof firstGroup === 'string') {
+      return firstGroup;
+    }
+    return 'Project';
+  };
 
   // PUBLIC_INTERFACE
   const onExport = async () => {
     setDownloading(true);
     try {
+      const base = buildExportBaseName({ teamOrProject: deriveTeamOrProject() });
+      const filename = `${base}.xlsx`;
       const url = await exportExcel();
       if (!url) return;
       const a = document.createElement('a');
       a.href = url;
-      a.download = `weekly-status-report_${new Date().toISOString().slice(0, 10)}.txt`;
+      a.download = filename;
+      a.setAttribute('data-filename', filename);
+      a.title = `Download ${filename}`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -27,6 +44,16 @@ export default function ExportPanel() {
     } finally {
       setDownloading(false);
     }
+  };
+
+  const onPrint = () => {
+    // Set a suggested PDF name via document title; most browsers use it as default
+    const base = buildExportBaseName({ teamOrProject: deriveTeamOrProject() });
+    const originalTitle = document.title;
+    document.title = `${base}.pdf`;
+    window.print();
+    // Restore after print
+    setTimeout(() => { document.title = originalTitle; }, 250);
   };
 
   const hasData = current && current.length > 0;
@@ -51,16 +78,18 @@ export default function ExportPanel() {
           disabled={disabled}
           aria-disabled={disabled}
           aria-live="polite"
-          aria-label="Download weekly status report"
+          aria-label="Download weekly status report as Excel"
+          title="Export Excel (downloads .xlsx)"
           type="button"
         >
           {downloading ? 'Preparing…' : 'Export Excel'}
         </button>
         <button
           className="op-btn ghost"
-          onClick={() => window.print()}
+          onClick={onPrint}
           type="button"
           aria-label="Print or Save as PDF"
+          title="Open print preview (Save as PDF)"
         >
           Print / PDF
         </button>
@@ -71,6 +100,7 @@ export default function ExportPanel() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           type="button"
           aria-label="Back to top"
+          title="Scroll to top"
         >
           Back to Top
         </button>
@@ -91,6 +121,7 @@ export default function ExportPanel() {
               type="button"
               onClick={onExport}
               aria-label="Retry export"
+              title="Retry export"
               disabled={!hasData}
             >
               Retry Export

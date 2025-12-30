@@ -301,3 +301,152 @@
 .op-status.success {
   color: var(--op-success);
 }
+
+/* Report preview header/footer & print stylesheet */
+.report-wrapper {
+  display: block;
+}
+.report-header-strip {
+  height: 6px;
+  width: 100%;
+  background: var(--brand-gradient);
+}
+.report-header {
+  margin-bottom: var(--space-4);
+}
+.report-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+}
+.report-appname {
+  font-size: var(--step-2);
+  font-weight: 800;
+}
+.report-meta {
+  display: inline-flex;
+  gap: 8px;
+  color: var(--op-muted);
+  font-size: var(--step--1);
+}
+.report-org {
+  font-weight: 600;
+  text-align: right;
+}
+.report-date {
+  color: var(--op-muted);
+  font-size: var(--step--1);
+  text-align: right;
+}
+.report-intro .report-title {
+  font-size: var(--step-1);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.report-intro .report-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--op-muted);
+  font-size: var(--step--1);
+}
+
+.report-group-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.report-group-hours {
+  color: var(--op-muted);
+}
+
+/* Footer */
+.report-footer {
+  margin-top: var(--space-6);
+}
+.report-footer-content {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--op-muted);
+  font-size: var(--step--1);
+  align-items: center;
+}
+
+/* Print styles */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm 14mm 18mm 14mm;
+  }
+
+  /* Preserve colors/gradients where needed */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide non-report UI (app chrome, nav, buttons, etc.) but keep the report content */
+  body {
+    background: #fff !important;
+  }
+  .op-header,
+  .op-toolbar .op-btn,
+  .skip-link,
+  .op-file,
+  .header-actions,
+  [data-tour-id],
+  /* hide the main container chrome except report wrapper content */
+  .op-container > :not(.op-section):not(.report-wrapper) {
+    display: none !important;
+  }
+
+  /* Ensure report wrapper and its inners are visible */
+  .report-wrapper,
+  .report-wrapper * {
+    visibility: visible !important;
+  }
+
+  /* Remove extra card borders for clean print */
+  .op-card {
+    box-shadow: none !important;
+  }
+
+  /* Table header repeat and page breaks */
+  table {
+    page-break-inside: auto;
+  }
+  thead { display: table-header-group; } /* repeat headers */
+  tfoot { display: table-footer-group; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+
+  .report-group {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .report-header {
+    position: static;
+  }
+
+  .report-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--op-border);
+    background: #fff;
+    padding-top: 6px;
+  }
+
+  /* Page number: use CSS counter where supported (fallback provided in DOM text) */
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+  }
+}
