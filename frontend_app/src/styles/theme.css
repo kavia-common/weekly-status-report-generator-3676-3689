@@ -24,15 +24,19 @@
   /* Brand gradient variable per spec */
   --brand-gradient: linear-gradient(45deg, #af2497 10%, #902d9a 20%, #1840a0 100%);
 
-  /* Upload dropzone theming (semi-transparent for softer look) */
+  /* Upload dropzone theming - increase transparency while keeping accessible hover/focus */
+  /* Base background ~5-6% average opacity across stops for subtle presence */
   --dropzone-bg: linear-gradient(
     45deg,
-    rgba(175, 36, 151, 0.85) 10%,
-    rgba(144, 45, 154, 0.82) 20%,
-    rgba(24, 64, 160, 0.82) 100%
+    rgba(175, 36, 151, 0.06) 10%,
+    rgba(144, 45, 154, 0.05) 20%,
+    rgba(24, 64, 160, 0.06) 100%
   );
-  --dropzone-border: rgba(255, 255, 255, 0.55);
-  --dropzone-border-hover: rgba(255, 255, 255, 0.85);
+  /* Base border ~15% for subtle delineation */
+  --dropzone-border: rgba(255, 255, 255, 0.15);
+  /* Hover/focus border increased for WCAG AA contrast against gradient */
+  --dropzone-border-hover: rgba(255, 255, 255, 0.9);
+  /* Text remains highly readable; do not reduce for accessibility */
   --dropzone-text: rgba(255, 255, 255, 0.98);
 
   /* Typography scale */
@@ -229,12 +233,26 @@
   border-color: var(--dropzone-border-hover);
   transform: translateY(-1px);
   box-shadow: var(--op-shadow-md);
+  /* Subtle increase in perceived background on hover to aid affordance */
+  background: linear-gradient(
+    45deg,
+    rgba(175, 36, 151, 0.10) 10%,
+    rgba(144, 45, 154, 0.08) 20%,
+    rgba(24, 64, 160, 0.10) 100%
+  );
 }
 .op-file.is-focus {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
   border-color: var(--dropzone-border-hover);
   box-shadow: var(--op-ring);
+  /* Keep background subtle; focus indicator is delivered via outline + ring */
+  background: linear-gradient(
+    45deg,
+    rgba(175, 36, 151, 0.10) 10%,
+    rgba(144, 45, 154, 0.08) 20%,
+    rgba(24, 64, 160, 0.10) 100%
+  );
 }
 
 /* Dropzone container utility to constrain content */
