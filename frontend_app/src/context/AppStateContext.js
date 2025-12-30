@@ -148,7 +148,7 @@ export function AppStateProvider({ children }) {
 
   /**
    * PUBLIC_INTERFACE
-   * loadSampleData - Fetch sample CSV (preferred) then XLSX from /assets, parse, and generate preview.
+   * loadSampleData - Fetch sample CSV from /assets only, parse, and generate preview.
    * @returns {Promise<void>}
    */
   const loadSampleData = useCallback(async () => {
@@ -156,36 +156,37 @@ export function AppStateProvider({ children }) {
     setStatusMessage('Loading sample data…');
     setLoading(true);
     try {
-      const candidates = [
-        { url: '/assets/sample_weekly_tasks.csv', name: 'sample_weekly_tasks.csv', type: 'text/csv' },
-        { url: '/assets/sample_weekly_tasks.xlsx', name: 'sample_weekly_tasks.xlsx', type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
-      ];
+      // Force CSV-only load per requirement
+      const csvSpec = {
+        url: '/assets/sample_weekly_tasks.csv',
+        name: 'sample_weekly_tasks.csv',
+        type: 'text/csv',
+      };
 
-      let file = null;
-      for (const c of candidates) {
-        try {
-          const res = await fetch(c.url, { cache: 'no-store' });
-          if (!res.ok) continue;
-          const blob = await res.blob();
-          try {
-            file = new File([blob], c.name, { type: c.type, lastModified: Date.now() });
-          } catch {
-            file = blob;
-            file.name = c.name;
-            file.lastModified = Date.now();
-            file.type = c.type;
-          }
-          break;
-        } catch {
-          // try next candidate
-        }
+      const res = await fetch(csvSpec.url, { cache: 'no-store' });
+      if (!res.ok) {
+        throw new Error('Sample CSV not found');
       }
-
-      if (!file) throw new Error('Sample files not found');
+      const blob = await res.blob();
+      let file;
+      try {
+        // Prefer File to preserve name/type metadata
+        file = new File([blob], csvSpec.name, { type: csvSpec.type, lastModified: Date.now() });
+      } catch {
+        // Older environments may not support File constructor
+        file = blob;
+        file.name = csvSpec.name;
+        file.lastModified = Date.now();
+        file.type = csvSpec.type;
+      }
 
       const filesArr = [file];
       setUploadedFiles(filesArr);
       const rows = await svcParseFiles(filesArr);
+      // Optional console log for quick verification
+      try {
+        console.info(`Loaded sample CSV rows: ${Array.isArray(rows) ? rows.length : 0}`);
+      } catch {}
       setNormalizedTasks(rows);
       const groups = await svcGeneratePreview(rows, rules);
       setReportPreview(groups);

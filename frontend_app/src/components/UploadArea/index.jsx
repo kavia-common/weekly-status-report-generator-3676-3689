@@ -258,7 +258,7 @@ export default function UploadArea() {
               className="op-btn secondary"
               type="button"
               onClick={onUseSample}
-              aria-label="Use Sample Data (loads demo CSV/XLSX and generates preview)"
+              aria-label="Use Sample Data (loads demo CSV and generates preview)"
               title="Use Sample Data"
             >
               Use Sample Data
@@ -292,7 +292,7 @@ export default function UploadArea() {
       </div>
       <div className="op-status op-ellipsis" style={{ marginTop: 4, maxWidth: '100%' }}>{helperText}</div>
       <div className="op-status" style={{ marginTop: 2 }}>
-        Tip: “Use Sample Data” loads a bundled demo file from /assets (CSV preferred, falls back to XLSX).
+        Tip: “Use Sample Data” loads a bundled demo CSV from /assets.
       </div>
 
       {/* Selected file meta and actions */}
