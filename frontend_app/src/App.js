@@ -45,22 +45,6 @@ function App() {
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button
-                  className="op-btn secondary"
-                  onClick={() => {
-                    try {
-                      // eslint-disable-next-line global-require
-                      const tour = require('./tour/useTour').default?.();
-                      tour?.resetAndStart?.() || tour?.start?.();
-                    } catch {
-                      // no-op if tour not yet mounted
-                    }
-                  }}
-                  aria-label="Start onboarding tour"
-                  type="button"
-                >
-                  Start Tour
-                </button>
-                <button
                   className="theme-toggle"
                   onClick={toggleTheme}
                   aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}

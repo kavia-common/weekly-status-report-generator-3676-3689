@@ -43,6 +43,16 @@ export default function ExportPanel() {
       <p id="export-desc" className="op-subtitle">Download your weekly status report.</p>
 
       <div className="op-toolbar">
+        {/* Primary right-aligned actions */}
+        <div className="op-spacer" />
+        <button
+          className="op-btn secondary"
+          type="button"
+          aria-label="Start onboarding tour"
+          onClick={() => tour?.resetAndStart?.() || tour?.start?.()}
+        >
+          {tour?.completed ? 'Replay Tour' : 'Start Tour'}
+        </button>
         <button
           className="op-btn"
           onClick={onExport}
@@ -62,15 +72,8 @@ export default function ExportPanel() {
         >
           Back to Top
         </button>
-        <div className="op-spacer" />
-        <button
-          className="op-btn secondary"
-          type="button"
-          aria-label="Start onboarding tour"
-          onClick={() => tour?.resetAndStart?.() || tour?.start?.()}
-        >
-          {tour?.completed ? 'Replay Tour' : 'Start Tour'}
-        </button>
+
+        {/* Status message remains readable and announced */}
         <span className={`op-status${error ? ' error' : ''}`} aria-live="polite">
           {loading ? 'Working…' : (error || statusMessage)}
         </span>
