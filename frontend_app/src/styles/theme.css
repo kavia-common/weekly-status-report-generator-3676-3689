@@ -9,9 +9,9 @@
   --op-text: #111827;
 
   --op-border: #e5e7eb;
-  --op-muted: #6b7280;
+  --op-muted: #374151; /* increased contrast */
 
-  --op-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+  --op-ring: 0 0 0 3px rgba(37, 99, 235, 0.45); /* higher visibility */
 
   --op-radius: 12px;
 
@@ -21,13 +21,28 @@
 
   /* Gradients */
   --op-gradient: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 250, 251, 1));
+
+  /* Typography scale */
+  --step--1: clamp(0.85rem, 0.8rem + 0.2vw, 0.95rem);
+  --step-0: clamp(1rem, 0.9rem + 0.4vw, 1.1rem);
+  --step-1: clamp(1.15rem, 1rem + 0.6vw, 1.25rem);
+  --step-2: clamp(1.35rem, 1.1rem + 1vw, 1.5rem);
+  --step-3: clamp(1.6rem, 1.3rem + 1.5vw, 1.9rem);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
 }
 
 /* Base utilities */
 .op-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: var(--space-6) var(--space-4);
 }
 
 .op-section {
@@ -35,13 +50,19 @@
   border: 1px solid var(--op-border);
   border-radius: var(--op-radius);
   box-shadow: var(--op-shadow-sm);
-  padding: 16px;
+  padding: var(--space-4);
 }
 
 .op-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .op-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 992px) {
@@ -51,23 +72,24 @@
 }
 
 .op-title {
-  font-size: 20px;
+  font-size: var(--step-2);
   font-weight: 700;
   color: var(--op-text);
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-3);
 }
 
 .op-subtitle {
-  font-size: 14px;
+  font-size: var(--step--1);
   color: var(--op-muted);
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-4);
 }
 
+/* Buttons and inputs: visible focus and contrast */
 .op-btn {
   appearance: none;
-  border: none;
+  border: 2px solid transparent;
   background: var(--op-primary);
-  color: white;
+  color: #ffffff;
   border-radius: 10px;
   padding: 10px 14px;
   font-weight: 600;
@@ -82,16 +104,28 @@
   opacity: 0.95;
 }
 
+.op-btn:focus-visible {
+  outline: 2px solid #1d4ed8; /* darker blue for AA */
+  outline-offset: 2px;
+  box-shadow: var(--op-ring);
+}
+
+.op-btn[aria-disabled="true"],
+.op-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .op-btn.secondary {
   background: var(--op-secondary);
-  color: #1f2937;
+  color: #111827;
 }
 
 .op-card {
   background: var(--op-surface);
   border: 1px solid var(--op-border);
   border-radius: 10px;
-  padding: 12px;
+  padding: var(--space-3);
 }
 
 .op-input {
@@ -100,25 +134,39 @@
   border-radius: 10px;
   border: 1px solid var(--op-border);
   padding: 10px 12px;
-  background: white;
+  background: #ffffff;
   color: var(--op-text);
 }
 
+.op-input:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+  box-shadow: var(--op-ring);
+}
+
+/* Drop area */
 .op-file {
   display: block;
   width: 100%;
   border-radius: 10px;
   border: 2px dashed var(--op-border);
-  padding: 16px;
+  padding: var(--space-4);
   background: #fff;
   color: var(--op-muted);
   text-align: center;
 }
 
+.op-file.is-focus {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Toolbar and layout helpers */
 .op-toolbar {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .op-spacer {
@@ -128,5 +176,63 @@
 .op-divider {
   height: 1px;
   background: var(--op-border);
-  margin: 12px 0;
+  margin: var(--space-3) 0;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--op-primary);
+  color: #fff;
+  padding: 8px 12px;
+  z-index: 100;
+  border-radius: 0 0 8px 0;
+  transition: top 120ms ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* Table accessibility base styles */
+.op-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.op-table th, .op-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--op-border);
+}
+
+.op-table th {
+  text-align: left;
+  color: var(--op-muted);
+  font-weight: 600;
+}
+
+.op-status {
+  font-size: var(--step--1);
+  color: var(--op-muted);
+}
+
+.op-status.error {
+  color: var(--op-error);
+}
+
+.op-status.success {
+  color: var(--op-success);
 }

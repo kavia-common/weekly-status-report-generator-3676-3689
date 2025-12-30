@@ -16,6 +16,7 @@ import {
  * - reportPreview: ReportPreviewData
  * - loading: boolean
  * - error: string
+ * - statusMessage: string
  *
  * Exposed Actions (stable):
  * - parseFile(fileList: FileList|File[]): Promise<void>
@@ -48,6 +49,8 @@ export function AppStateProvider({ children }) {
   const [loading, setLoading] = useState(false);
   /** @type {[string, React.Dispatch<React.SetStateAction<string>>]} */
   const [error, setError] = useState('');
+  /** @type {[string, React.Dispatch<React.SetStateAction<string>>]} */
+  const [statusMessage, setStatusMessage] = useState('Ready');
 
   /**
    * PUBLIC_INTERFACE
@@ -57,6 +60,7 @@ export function AppStateProvider({ children }) {
    */
   const parseFile = useCallback(async (fileList) => {
     setError('');
+    setStatusMessage('Parsing file…');
     setLoading(true);
     try {
       const files = Array.from(fileList || []);
@@ -67,8 +71,10 @@ export function AppStateProvider({ children }) {
       // Update preview to keep UI in sync on upload
       const groups = await svcGeneratePreview(rows, rules);
       setReportPreview(groups);
+      setStatusMessage('Preview ready');
     } catch (e) {
       setError('Failed to parse files.');
+      setStatusMessage('Parsing failed');
     } finally {
       setLoading(false);
     }
@@ -83,9 +89,10 @@ export function AppStateProvider({ children }) {
     setRules((prev) => {
       const next = { ...prev, ...partialRules };
       if (normalizedTasks && normalizedTasks.length > 0) {
+        setStatusMessage('Updating preview…');
         svcGeneratePreview(normalizedTasks, next)
-          .then(setReportPreview)
-          .catch(() => {});
+          .then((g) => { setReportPreview(g); setStatusMessage('Preview updated'); })
+          .catch(() => { setStatusMessage('Preview update failed'); });
       }
       return next;
     });
@@ -98,12 +105,15 @@ export function AppStateProvider({ children }) {
    */
   const generatePreview = useCallback(async () => {
     setError('');
+    setStatusMessage('Generating preview…');
     setLoading(true);
     try {
       const groups = await svcGeneratePreview(normalizedTasks || [], rules);
       setReportPreview(groups);
+      setStatusMessage('Preview ready');
     } catch (e) {
       setError('Failed to generate preview.');
+      setStatusMessage('Preview generation failed');
     } finally {
       setLoading(false);
     }
@@ -117,13 +127,19 @@ export function AppStateProvider({ children }) {
    */
   const exportExcel = useCallback(async () => {
     setError('');
+    setStatusMessage('Preparing export…');
     setLoading(true);
     try {
-      if (!reportPreview || reportPreview.length === 0) return null;
+      if (!reportPreview || reportPreview.length === 0) {
+        setStatusMessage('Nothing to export');
+        return null;
+      }
       const url = await svcExportReport(reportPreview);
+      setStatusMessage('Export ready');
       return url;
     } catch (e) {
       setError('Failed to export report.');
+      setStatusMessage('Export failed');
       return null;
     } finally {
       setLoading(false);
@@ -139,6 +155,7 @@ export function AppStateProvider({ children }) {
       reportPreview,
       loading,
       error,
+      statusMessage,
       // Backward compatibility setters for current components (will be removed later)
       setUploadedFiles,
       setRules,
@@ -157,6 +174,7 @@ export function AppStateProvider({ children }) {
       reportPreview,
       loading,
       error,
+      statusMessage,
       parseFile,
       updateRules,
       generatePreview,

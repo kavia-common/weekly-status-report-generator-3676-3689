@@ -64,7 +64,7 @@
   right: 20px;
   background-color: var(--button-bg);
   color: var(--button-text);
-  border: none;
+  border: 2px solid transparent;
   border-radius: 8px;
   padding: 10px 20px;
   font-size: 14px;
@@ -82,6 +82,11 @@
 
 .theme-toggle:active {
   transform: translateY(0);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
 }
 
 @keyframes App-logo-spin {

@@ -25,7 +25,9 @@ function App() {
 
   return (
     <div className="App" style={{ background: 'var(--op-background)' }}>
-      <header className="App-header" style={{ background: 'transparent', minHeight: 'auto' }}>
+      <a href="#main" className="skip-link">Skip to content</a>
+
+      <header className="App-header" style={{ background: 'transparent', minHeight: 'auto' }} role="banner">
         <div className="op-container" style={{ paddingTop: 24, paddingBottom: 8 }}>
           <div style={{
             display: 'flex',
@@ -36,7 +38,7 @@ function App() {
           }}>
             <div>
               <h1 style={{ margin: 0, color: 'var(--op-text)' }}>Weekly Status Report Generator</h1>
-              <div style={{ color: 'var(--op-muted)' }}>Upload • Configure • Preview • Export</div>
+              <p className="op-status" aria-live="polite" id="app-subtitle">Upload • Configure • Preview • Export</p>
             </div>
             <button
               className="theme-toggle"
@@ -49,17 +51,23 @@ function App() {
         </div>
       </header>
 
-      <main className="op-container">
+      <main id="main" className="op-container" role="main" tabIndex={-1}>
         <AppStateProvider>
           <div className="op-grid" style={{ marginBottom: 16 }}>
-            <div style={{ display: 'grid', gap: 16 }}>
-              <UploadArea />
-              <RuleConfig />
-            </div>
-            <div style={{ display: 'grid', gap: 16 }}>
-              <ReportPreview />
-              <ExportPanel />
-            </div>
+            <section aria-labelledby="upload-config">
+              <h2 id="upload-config" className="sr-only">Upload and Configuration</h2>
+              <div style={{ display: 'grid', gap: 16 }}>
+                <UploadArea />
+                <RuleConfig />
+              </div>
+            </section>
+            <section aria-labelledby="preview-export">
+              <h2 id="preview-export" className="sr-only">Preview and Export</h2>
+              <div style={{ display: 'grid', gap: 16 }}>
+                <ReportPreview />
+                <ExportPanel />
+              </div>
+            </section>
           </div>
         </AppStateProvider>
       </main>
