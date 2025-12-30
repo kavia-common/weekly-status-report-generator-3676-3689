@@ -146,6 +146,58 @@ export function AppStateProvider({ children }) {
     }
   }, [reportPreview]);
 
+  /**
+   * PUBLIC_INTERFACE
+   * loadSampleData - Fetch sample CSV (preferred) then XLSX from /assets, parse, and generate preview.
+   * @returns {Promise<void>}
+   */
+  const loadSampleData = useCallback(async () => {
+    setError('');
+    setStatusMessage('Loading sample data…');
+    setLoading(true);
+    try {
+      const candidates = [
+        { url: '/assets/sample_weekly_tasks.csv', name: 'sample_weekly_tasks.csv', type: 'text/csv' },
+        { url: '/assets/sample_weekly_tasks.xlsx', name: 'sample_weekly_tasks.xlsx', type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+      ];
+
+      let file = null;
+      for (const c of candidates) {
+        try {
+          const res = await fetch(c.url, { cache: 'no-store' });
+          if (!res.ok) continue;
+          const blob = await res.blob();
+          try {
+            file = new File([blob], c.name, { type: c.type, lastModified: Date.now() });
+          } catch {
+            file = blob;
+            file.name = c.name;
+            file.lastModified = Date.now();
+            file.type = c.type;
+          }
+          break;
+        } catch {
+          // try next candidate
+        }
+      }
+
+      if (!file) throw new Error('Sample files not found');
+
+      const filesArr = [file];
+      setUploadedFiles(filesArr);
+      const rows = await svcParseFiles(filesArr);
+      setNormalizedTasks(rows);
+      const groups = await svcGeneratePreview(rows, rules);
+      setReportPreview(groups);
+      setStatusMessage('Sample loaded • Preview ready');
+    } catch (e) {
+      setError('Unable to load sample data.');
+      setStatusMessage('Sample load failed');
+    } finally {
+      setLoading(false);
+    }
+  }, [rules]);
+
   const value = useMemo(
     () => ({
       // Stable state
@@ -166,6 +218,7 @@ export function AppStateProvider({ children }) {
       updateRules,
       generatePreview,
       exportExcel,
+      loadSampleData,
     }),
     [
       uploadedFiles,

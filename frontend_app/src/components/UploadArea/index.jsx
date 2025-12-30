@@ -16,6 +16,7 @@ export default function UploadArea() {
     loading,
     error: ctxError,
     statusMessage,
+    loadSampleData,
   } = useAppState();
 
   // Local UI state
@@ -177,25 +178,22 @@ export default function UploadArea() {
     setLocalError('');
     setShowErrorDetails(false);
     setLocalStatus('Loading sample…');
-    announce('Loading sample file');
+    announce('Loading sample data');
 
     try {
-      const url = '/assets/sample_weekly_tasks.xlsx';
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error('Sample file not found');
-      }
-      const blob = await res.blob();
-      // Construct a File object from blob (some environments support File constructor)
-      const file = new File([blob], 'sample_weekly_tasks.xlsx', {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      await loadSampleData();
+      // Set a synthetic selection indicator for UI purposes
+      setSelectedFile({
+        name: 'Sample data',
+        size: 0,
         lastModified: Date.now(),
       });
-      await beginParse([file]);
-    } catch (err) {
-      setLocalError('Unable to load the sample file.');
+      setLocalStatus('File ready');
+      announce('Sample loaded, preview ready');
+    } catch {
+      setLocalError('Unable to load the sample data.');
       setLocalStatus('Error');
-      announce('Sample file failed to load');
+      announce('Sample data failed to load');
     }
   };
 
@@ -249,9 +247,18 @@ export default function UploadArea() {
           <div className="op-status" style={{ opacity: 0.9, marginBottom: 12 }}>
             or
           </div>
-          <div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
             <button className="op-btn" type="button" onClick={onBrowseClick} aria-label="Browse for a file">
               Browse
+            </button>
+            <button
+              className="op-btn secondary"
+              type="button"
+              onClick={onUseSample}
+              aria-label="Use Sample Data (loads demo CSV/XLSX and generates preview)"
+              title="Use Sample Data"
+            >
+              Use Sample Data
             </button>
           </div>
         </div>
@@ -279,17 +286,11 @@ export default function UploadArea() {
           {isProcessing ? 'Processing…' : (statusMessage || localStatus || 'Idle')}
         </span>
         <div className="op-spacer" />
-        <a
-          href="/assets/sample_weekly_tasks.xlsx"
-          onClick={onUseSample}
-          className="op-btn ghost"
-          aria-label="Use sample file"
-          title="Load sample file"
-        >
-          Use sample file
-        </a>
       </div>
       <div className="op-status op-ellipsis" style={{ marginTop: 4, maxWidth: '100%' }}>{helperText}</div>
+      <div className="op-status" style={{ marginTop: 2 }}>
+        Tip: “Use Sample Data” loads a bundled demo file from /assets (CSV preferred, falls back to XLSX).
+      </div>
 
       {/* Selected file meta and actions */}
       {selectedFile && (
