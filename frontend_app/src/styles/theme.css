@@ -491,6 +491,132 @@
   font-size: var(--step--1);
 }
 
+/* Metrics chips above charts */
+.chart-metrics {
+  margin: 8px 0 12px 0;
+}
+.metric-chip {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 120px;
+  box-shadow: var(--op-shadow-sm);
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--op-muted);
+}
+.metric-value {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* Charts container */
+.charts-wrap {
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 10px;
+}
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 992px) {
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--op-text);
+}
+
+/* Donut + bars layout */
+.chart-distribution {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+@media (max-width: 520px) {
+  .chart-distribution {
+    grid-template-columns: 1fr;
+  }
+  .chart-distribution .donut-wrap {
+    justify-self: start;
+  }
+}
+.chart-donut {
+  max-width: 160px;
+  height: auto;
+}
+.chart-bars {
+  display: grid;
+  gap: 8px;
+}
+.chart-bar-row {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+.chart-bar-label {
+  font-size: 12px;
+  color: var(--op-muted);
+}
+.chart-bar-track {
+  background: #f3f4f6;
+  border: 1px solid var(--op-border);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+.chart-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* Legend */
+.chart-legend {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--op-muted);
+}
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--op-border);
+}
+
+/* Trend chart */
+.chart-trend {
+  width: 100%;
+  height: auto;
+}
+.chart-axis-text {
+  font-size: 10px;
+  fill: var(--op-muted);
+}
+
+/* Report groups */
 .report-group-title {
   display: flex;
   align-items: baseline;
@@ -530,7 +656,6 @@
     color-adjust: exact !important;
   }
 
-  /* Hide non-report UI (app chrome, nav, buttons, etc.) but keep the report content */
   body {
     background: #fff !important;
   }
@@ -540,27 +665,29 @@
   .op-file,
   .header-actions,
   [data-tour-id],
-  /* hide the main container chrome except report wrapper content */
   .op-container > :not(.op-section):not(.report-wrapper) {
     display: none !important;
   }
 
-  /* Ensure report wrapper and its inners are visible */
   .report-wrapper,
   .report-wrapper * {
     visibility: visible !important;
   }
 
-  /* Remove extra card borders for clean print */
   .op-card {
     box-shadow: none !important;
   }
 
-  /* Table header repeat and page breaks */
+  /* Ensure charts print crisply and avoid page-break inside the chart panels */
+  .charts-wrap, .chart-panel, .chart-distribution, .chart-trend, .chart-bars {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
   table {
     page-break-inside: auto;
   }
-  thead { display: table-header-group; } /* repeat headers */
+  thead { display: table-header-group; }
   tfoot { display: table-footer-group; }
   tr { page-break-inside: avoid; page-break-after: auto; }
 
@@ -583,7 +710,6 @@
     padding-top: 6px;
   }
 
-  /* Page number: use CSS counter where supported (fallback provided in DOM text) */
   @bottom-right {
     content: "Page " counter(page) " of " counter(pages);
   }
