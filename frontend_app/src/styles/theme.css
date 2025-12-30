@@ -512,6 +512,58 @@
   font-weight: 800;
 }
 
+/* Quick summary chips row and total-count badge */
+.chip-row {
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.total-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: var(--op-shadow-sm);
+}
+.total-count-number {
+  font-weight: 800;
+  font-size: 14px;
+}
+.total-count-label {
+  font-size: 12px;
+  color: var(--op-muted);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: var(--op-shadow-sm);
+}
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--op-border);
+}
+.chip-text {
+  font-size: 12px;
+  color: var(--op-muted);
+}
+.chip-count {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--op-text);
+}
+
 /* Charts container */
 .charts-wrap {
   background: var(--op-surface);
@@ -665,6 +717,7 @@
   .op-file,
   .header-actions,
   [data-tour-id],
+  .chip-row, /* hide quick summary chips & total badge on print */
   .op-container > :not(.op-section):not(.report-wrapper) {
     display: none !important;
   }

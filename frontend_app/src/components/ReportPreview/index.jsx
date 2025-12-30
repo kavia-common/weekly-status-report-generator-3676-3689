@@ -9,7 +9,7 @@ export default function ReportPreview() {
   const { reportPreview, loading, error, rules } = useAppState();
   const data = reportPreview || [];
 
-  // Derive flat items for charts
+  // Derive flat items for charts and summary chips
   const flatItems = useMemo(() => {
     const items = [];
     (data || []).forEach((g) => {
@@ -22,14 +22,33 @@ export default function ReportPreview() {
   const totals = useMemo(() => {
     const totalGroups = data.length || 0;
     const totalHours = (data || []).reduce((acc, g) => acc + (g.totalHours || 0), 0);
-    const statusCounts = {};
+
+    // Build normalized status counts
+    const counts = {};
     flatItems.forEach((it) => {
-      const s = it.status || 'Unknown';
-      statusCounts[s] = (statusCounts[s] || 0) + 1;
+      const s = String(it.status || 'Unknown').trim();
+      counts[s] = (counts[s] || 0) + 1;
     });
+
     const totalTasks = flatItems.length;
-    return { totalGroups, totalHours, totalTasks, statusCounts };
+    return { totalGroups, totalHours, totalTasks, statusCounts: counts };
   }, [data, flatItems]);
+
+  // Derive canonical buckets for chips
+  const chipCounts = useMemo(() => {
+    const map = totals.statusCounts || {};
+    const fromKeys = (keys) => keys.reduce((acc, k) => acc + (map[k] || 0), 0);
+    // Common status labels mapping
+    const completed = fromKeys(['Done', 'Completed']);
+    const inProgress = fromKeys(['In Progress', 'In_Progress', 'Doing']);
+    const blocked = fromKeys(['Blocked']);
+    // "Not Started" covers explicit labels or inferred remaining if present
+    const explicitNotStarted = fromKeys(['Not Started', 'To Do', 'Todo', 'Open', 'Backlog']);
+    const knownSum = completed + inProgress + blocked + explicitNotStarted;
+    const inferredNotStarted = Math.max(0, (totals.totalTasks || 0) - knownSum);
+    const notStarted = explicitNotStarted + inferredNotStarted;
+    return { completed, inProgress, blocked, notStarted };
+  }, [totals]);
 
   // Trend derivation (by day using a naive distribution from hours or assume equal weight if no date)
   // If items contain CompletedDate/StartDate/DueDate, prefer CompletedDate then DueDate then StartDate.
@@ -73,7 +92,9 @@ export default function ReportPreview() {
     const entries = Object.entries(totals.statusCounts || {});
     // Stable order: Done, In Progress, Blocked, Others
     const order = ['Done', 'In Progress', 'Blocked'];
-    const known = entries.filter(([k]) => order.includes(k)).sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+    const known = entries
+      .filter(([k]) => order.includes(k))
+      .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
     const others = entries.filter(([k]) => !order.includes(k));
     return [...known, ...others];
   }, [totals.statusCounts]);
@@ -230,9 +251,10 @@ export default function ReportPreview() {
     );
   }
 
-  const totalDone = totals.statusCounts['Done'] || 0;
-  const totalInProgress = totals.statusCounts['In Progress'] || 0;
-  const totalBlocked = totals.statusCounts['Blocked'] || 0;
+  const totalDone = chipCounts.completed;
+  const totalInProgress = chipCounts.inProgress;
+  const totalBlocked = chipCounts.blocked;
+  const totalNotStarted = chipCounts.notStarted;
 
   return (
     <section className="report-wrapper" aria-labelledby="preview-title" aria-describedby="preview-desc" data-tour-id="preview">
@@ -266,6 +288,62 @@ export default function ReportPreview() {
           <div><strong>Timeframe:</strong> {dateRangeLabel}</div>
           <div><strong>Totals:</strong> {totals.totalGroups} groups • {totals.totalHours}h</div>
         </div>
+      </div>
+
+      {/* New total count badge + summary chips (screen only by default; hidden on print via media query) */}
+      <div
+        className="op-toolbar chip-row"
+        role="group"
+        aria-label="Report quick summary"
+        style={{ margin: '6px 0 10px 0' }}
+      >
+        <div
+          className="total-count-badge"
+          aria-label={`Total tasks parsed: ${totals.totalTasks}`}
+          title="Total tasks parsed"
+          role="status"
+        >
+          <span className="total-count-number" aria-hidden="true">{totals.totalTasks}</span>
+          <span className="total-count-label">Total</span>
+        </div>
+
+        <div className="chip"
+             role="status"
+             aria-label={`Completed: ${totalDone}`}
+             title="Completed">
+          <span className="chip-dot" style={{ background: colorDone }} aria-hidden="true" />
+          <span className="chip-text">Completed</span>
+          <span className="chip-count">{totalDone}</span>
+        </div>
+
+        <div className="chip"
+             role="status"
+             aria-label={`In Progress: ${totalInProgress}`}
+             title="In Progress">
+          <span className="chip-dot" style={{ background: colorInProgress }} aria-hidden="true" />
+          <span className="chip-text">In Progress</span>
+          <span className="chip-count">{totalInProgress}</span>
+        </div>
+
+        <div className="chip"
+             role="status"
+             aria-label={`Blocked: ${totalBlocked}`}
+             title="Blocked">
+          <span className="chip-dot" style={{ background: colorBlocked }} aria-hidden="true" />
+          <span className="chip-text">Blocked</span>
+          <span className="chip-count">{totalBlocked}</span>
+        </div>
+
+        <div className="chip"
+             role="status"
+             aria-label={`Not Started: ${totalNotStarted}`}
+             title="Not Started">
+          <span className="chip-dot" style={{ background: 'var(--op-muted)' }} aria-hidden="true" />
+          <span className="chip-text">Not Started</span>
+          <span className="chip-count">{totalNotStarted}</span>
+        </div>
+
+        <div className="op-spacer" />
       </div>
 
       {/* Metrics chips */}
