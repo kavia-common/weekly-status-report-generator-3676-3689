@@ -1,17 +1,17 @@
 :root {
-  /* Ocean Professional Theme */
+  /* Ocean Professional Theme + Brand Gradient */
   --op-primary: #2563EB;   /* Blue */
   --op-secondary: #F59E0B; /* Amber */
-  --op-success: #10B981;   /* Emerald for positive states */
-  --op-error: #EF4444;     /* Red */
+  --op-success: #10B981;
+  --op-error: #EF4444;
   --op-background: #f9fafb;
   --op-surface: #ffffff;
   --op-text: #111827;
 
   --op-border: #e5e7eb;
-  --op-muted: #374151; /* increased contrast */
+  --op-muted: #374151;
 
-  --op-ring: 0 0 0 3px rgba(37, 99, 235, 0.45); /* higher visibility */
+  --op-ring: 0 0 0 3px rgba(37, 99, 235, 0.45);
 
   --op-radius: 12px;
 
@@ -21,6 +21,8 @@
 
   /* Gradients */
   --op-gradient: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(249, 250, 251, 1));
+  /* Brand gradient variable per spec */
+  --brand-gradient: linear-gradient(45deg, #af2497 10%, #902d9a 20%, #1840a0 100%);
 
   /* Typography scale */
   --step--1: clamp(0.85rem, 0.8rem + 0.2vw, 0.95rem);
@@ -29,13 +31,41 @@
   --step-2: clamp(1.35rem, 1.1rem + 1vw, 1.5rem);
   --step-3: clamp(1.6rem, 1.3rem + 1.5vw, 1.9rem);
 
-  /* Spacing scale */
+  /* Spacing scale (8px base) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+}
+
+/* Header brand bar or full header utility */
+.op-header {
+  background: var(--op-surface);
+  position: relative;
+}
+.op-header.brand-bg {
+  background: var(--brand-gradient);
+  color: #fff;
+}
+.op-header .brand-strip {
+  height: 4px;
+  width: 100%;
+  background: var(--brand-gradient);
+}
+.op-header .header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.op-header .header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 /* Base utilities */
@@ -50,19 +80,14 @@
   border: 1px solid var(--op-border);
   border-radius: var(--op-radius);
   box-shadow: var(--op-shadow-sm);
-  padding: var(--space-4);
+  padding: var(--space-5);
 }
 
+/* Standardized grid: 2-column desktop, 1-column mobile */
 .op-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-4);
-}
-
-@media (min-width: 640px) {
-  .op-grid {
-    grid-template-columns: 1fr;
-  }
+  gap: var(--space-6);
 }
 
 @media (min-width: 992px) {
@@ -71,11 +96,17 @@
   }
 }
 
+/* Card-like sections headings with subtle accent */
 .op-title {
   font-size: var(--step-2);
   font-weight: 700;
   color: var(--op-text);
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2);
+  border-top: 4px solid transparent;
+}
+.op-section .op-title {
+  border-image: var(--brand-gradient) 1;
+  border-top: 4px solid;
 }
 
 .op-subtitle {
@@ -84,7 +115,7 @@
   margin: 0 0 var(--space-4);
 }
 
-/* Buttons and inputs: visible focus and contrast */
+/* Buttons: primary uses brand gradient, accessible hover/focus */
 .op-btn {
   appearance: none;
   border: 2px solid transparent;
@@ -95,37 +126,55 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--op-shadow-sm);
-  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease, filter 120ms ease;
 }
 
+/* Gradient primary variant */
+.op-btn.primary,
+.op-btn:not(.secondary):not(.ghost) {
+  background: var(--brand-gradient);
+  color: #ffffff;
+}
 .op-btn:hover {
   transform: translateY(-1px);
   box-shadow: var(--op-shadow-md);
-  opacity: 0.95;
+  filter: brightness(1.05);
+  opacity: 0.98;
 }
-
+.op-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
 .op-btn:focus-visible {
-  outline: 2px solid #1d4ed8; /* darker blue for AA */
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
   box-shadow: var(--op-ring);
 }
 
+/* Disabled state */
 .op-btn[aria-disabled="true"],
 .op-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
+/* Secondary and ghost */
 .op-btn.secondary {
-  background: var(--op-secondary);
+  background: #ffffff;
   color: #111827;
+  border-color: var(--op-border);
+}
+.op-btn.ghost {
+  background: transparent;
+  color: var(--op-text);
 }
 
+/* Cards and inputs */
 .op-card {
   background: var(--op-surface);
   border: 1px solid var(--op-border);
   border-radius: 10px;
-  padding: var(--space-3);
+  padding: var(--space-4);
 }
 
 .op-input {
@@ -144,20 +193,24 @@
   box-shadow: var(--op-ring);
 }
 
-/* Drop area */
+/* Prominent drop area using brand gradient background with white text */
 .op-file {
   display: block;
   width: 100%;
-  border-radius: 10px;
-  border: 2px dashed var(--op-border);
-  padding: var(--space-4);
-  background: #fff;
-  color: var(--op-muted);
+  border-radius: 12px;
+  border: 2px dashed rgba(255,255,255,0.65);
+  padding: var(--space-6);
+  background: var(--brand-gradient);
+  color: #ffffff;
   text-align: center;
 }
-
+.op-file .op-btn {
+  /* Button on gradient stays readable */
+  background: #ffffff;
+  color: #111827;
+}
 .op-file.is-focus {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 
@@ -176,7 +229,7 @@
 .op-divider {
   height: 1px;
   background: var(--op-border);
-  margin: var(--space-3) 0;
+  margin: var(--space-4) 0;
 }
 
 /* Screen reader only */
@@ -193,46 +246,58 @@
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--op-primary);
+  background: var(--brand-gradient);
   color: #fff;
   padding: 8px 12px;
   z-index: 100;
   border-radius: 0 0 8px 0;
   transition: top 120ms ease;
 }
-
 .skip-link:focus {
   top: 0;
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
 
-/* Table accessibility base styles */
+/* Table: sticky header for desktop and density utility */
 .op-table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .op-table th, .op-table td {
   padding: 8px 10px;
   border-bottom: 1px solid var(--op-border);
 }
-
 .op-table th {
   text-align: left;
   color: var(--op-muted);
   font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: var(--op-surface);
+  z-index: 1;
+}
+@media (max-width: 991px) {
+  .op-table th {
+    position: static;
+  }
 }
 
+/* density: compact rows toggle */
+.table-compact .op-table th,
+.table-compact .op-table td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* Status text */
 .op-status {
   font-size: var(--step--1);
   color: var(--op-muted);
 }
-
 .op-status.error {
   color: var(--op-error);
 }
-
 .op-status.success {
   color: var(--op-success);
 }

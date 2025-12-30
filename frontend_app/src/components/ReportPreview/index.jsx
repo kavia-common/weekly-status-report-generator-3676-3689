@@ -10,9 +10,9 @@ export default function ReportPreview() {
   const data = reportPreview || [];
 
   return (
-    <section className="op-section" aria-labelledby="preview-title" aria-describedby="preview-desc" data-tour-id="preview">
-      <h2 id="preview-title" className="op-title">Report Preview</h2>
-      <p id="preview-desc" className="op-subtitle">A quick look at how your report will be structured.</p>
+    <section className="" aria-labelledby="preview-title" aria-describedby="preview-desc" data-tour-id="preview">
+      <h2 id="preview-title" className="sr-only">Report Preview</h2>
+      <p id="preview-desc" className="sr-only">A quick look at how your report will be structured.</p>
 
       {loading && (
         <div className="op-card" role="status" aria-live="polite">
@@ -39,27 +39,29 @@ export default function ReportPreview() {
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
                 {group.group} — {group.totalHours}h
               </div>
-              <table className="op-table" aria-label={`Items for ${group.group}`}>
-                <caption className="sr-only">Tasks grouped by {group.group}</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Summary</th>
-                    <th scope="col">Hours</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {group.items.map((item) => (
-                    <tr key={item.id}>
-                      <td><span style={{ color: 'var(--op-muted)' }}>{item.id}</span></td>
-                      <td>{item.summary}</td>
-                      <td>{item.hours}h</td>
-                      <td>{item.status}</td>
+              <div style={{ overflowX: 'auto' }}>
+                <table className="op-table" aria-label={`Items for ${group.group}`}>
+                  <caption className="sr-only">Tasks grouped by {group.group}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Summary</th>
+                      <th scope="col">Hours</th>
+                      <th scope="col">Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {group.items.map((item) => (
+                      <tr key={item.id}>
+                        <td><span style={{ color: 'var(--op-muted)' }}>{item.id}</span></td>
+                        <td>{item.summary}</td>
+                        <td>{item.hours}h</td>
+                        <td>{item.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ))}
         </div>

@@ -44,6 +44,7 @@ function HeaderStartTourButton() {
 
 function App() {
   const [theme, setTheme] = useState('light');
+  const [compact, setCompact] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -59,54 +60,77 @@ function App() {
       <a href="#main" className="skip-link">Skip to content</a>
 
       <TourProvider>
-        <header className="App-header" style={{ background: 'transparent', minHeight: 'auto' }} role="banner">
-          <div className="op-container" style={{ paddingTop: 24, paddingBottom: 8 }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              marginBottom: 16,
-              justifyContent: 'space-between'
-            }}>
+        {/* Header with brand gradient accent and actions cluster */}
+        <header className="op-header brand-bg" role="banner">
+          <div className="brand-strip" aria-hidden="true" />
+          <div className="op-container" style={{ paddingTop: 16, paddingBottom: 16 }}>
+            <div className="header-row">
               <div>
-                <h1 style={{ margin: 0, color: 'var(--op-text)' }}>Weekly Status Report Generator</h1>
-                <p className="op-status" aria-live="polite" id="app-subtitle">Upload • Configure • Preview • Export</p>
+                <h1 style={{ margin: 0, color: '#ffffff' }}>Weekly Status Report Generator</h1>
+                <p className="op-status" aria-live="polite" id="app-subtitle" style={{ color: 'rgba(255,255,255,0.9)' }}>
+                  Upload • Configure • Preview • Export
+                </p>
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div className="header-actions" aria-label="Header actions">
                 <button
                   className="theme-toggle"
                   onClick={toggleTheme}
                   aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                  title="Toggle theme"
                 >
                   {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
                 </button>
-                {/* Header Start Tour button placed next to theme toggle */}
                 <HeaderStartTourButton />
               </div>
             </div>
           </div>
         </header>
 
-      <main id="main" className="op-container" role="main" tabIndex={-1}>
-        <AppStateProvider>
-          <div className="op-grid" style={{ marginBottom: 16 }}>
-            <section aria-labelledby="upload-config">
-              <h2 id="upload-config" className="sr-only">Upload and Configuration</h2>
-              <div style={{ display: 'grid', gap: 16 }}>
+        <main id="main" className="op-container" role="main" tabIndex={-1}>
+          <AppStateProvider>
+            {/* Top grid: Upload (left) and Rules (right) on desktop */}
+            <div className="op-grid" style={{ marginBottom: 16 }}>
+              <section aria-labelledby="upload-title-section">
+                <h2 id="upload-title-section" className="sr-only">Upload</h2>
                 <UploadArea />
+              </section>
+              <section aria-labelledby="rules-title-section">
+                <h2 id="rules-title-section" className="sr-only">Rule Configuration</h2>
                 <RuleConfig />
+              </section>
+            </div>
+
+            {/* Full-width below: Preview with density toggle */}
+            <section aria-labelledby="preview-title-wrap">
+              <h2 id="preview-title-wrap" className="sr-only">Report Preview</h2>
+              <div className="op-section">
+                <div className="op-toolbar" style={{ marginBottom: 8 }}>
+                  <h3 className="op-title" style={{ margin: 0 }}>Report Preview</h3>
+                  <div className="op-spacer" />
+                  <label htmlFor="density-toggle" className="op-status" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                      id="density-toggle"
+                      type="checkbox"
+                      checked={compact}
+                      onChange={(e) => setCompact(e.target.checked)}
+                      aria-label="Toggle compact table density"
+                    />
+                    Compact
+                  </label>
+                </div>
+                <div className={compact ? 'table-compact' : ''}>
+                  <ReportPreview />
+                </div>
               </div>
             </section>
-            <section aria-labelledby="preview-export">
-              <h2 id="preview-export" className="sr-only">Preview and Export</h2>
-              <div style={{ display: 'grid', gap: 16 }}>
-                <ReportPreview />
-                <ExportPanel />
-              </div>
+
+            {/* Full-width bottom: Export */}
+            <section aria-labelledby="export-title-wrap" style={{ marginTop: 16 }}>
+              <h2 id="export-title-wrap" className="sr-only">Export Panel</h2>
+              <ExportPanel />
             </section>
-          </div>
-        </AppStateProvider>
-      </main>
+          </AppStateProvider>
+        </main>
       </TourProvider>
     </div>
   );

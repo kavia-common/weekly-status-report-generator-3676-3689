@@ -36,9 +36,15 @@ export default function ExportPanel() {
       <h2 id="export-title" className="op-title">Export</h2>
       <p id="export-desc" className="op-subtitle">Download your weekly status report.</p>
 
-      <div className="op-toolbar">
-        {/* Primary right-aligned actions */}
+      <div className="op-toolbar" role="group" aria-label="Export actions">
+        {/* Left: status */}
+        <span className={`op-status${error ? ' error' : ''}`} aria-live="polite">
+          {loading ? 'Working…' : (error || statusMessage)}
+        </span>
+
         <div className="op-spacer" />
+
+        {/* Primary actions */}
         <button
           className="op-btn"
           onClick={onExport}
@@ -48,8 +54,18 @@ export default function ExportPanel() {
           aria-label="Download weekly status report"
           type="button"
         >
-          {downloading ? 'Preparing…' : 'Download Report'}
+          {downloading ? 'Preparing…' : 'Export Excel'}
         </button>
+        <button
+          className="op-btn ghost"
+          onClick={() => window.print()}
+          type="button"
+          aria-label="Print or Save as PDF"
+        >
+          Print / PDF
+        </button>
+
+        {/* Secondary action to the right */}
         <button
           className="op-btn secondary"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -58,11 +74,6 @@ export default function ExportPanel() {
         >
           Back to Top
         </button>
-
-        {/* Status message remains readable and announced */}
-        <span className={`op-status${error ? ' error' : ''}`} aria-live="polite">
-          {loading ? 'Working…' : (error || statusMessage)}
-        </span>
       </div>
 
       {!hasData && !loading && !error && (

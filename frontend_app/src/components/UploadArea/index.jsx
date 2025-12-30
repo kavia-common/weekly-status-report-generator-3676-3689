@@ -45,7 +45,7 @@ export default function UploadArea() {
 
   return (
     <section className="op-section" aria-labelledby="upload-title" aria-describedby="upload-desc" data-tour-id="upload">
-      <h2 id="upload-title" className="op-title">Upload Data</h2>
+      <h2 id="upload-title" className="op-title">Upload</h2>
       <p id="upload-desc" className="op-subtitle">Upload CSV or Jira export files to begin.</p>
 
       <div
@@ -65,14 +65,15 @@ export default function UploadArea() {
         onBlur={() => setIsFocus(false)}
         aria-label="Upload files via click or drag-and-drop"
         aria-describedby="upload-help"
-        style={{
-          background: 'var(--op-gradient)',
-        }}
       >
-        Drag & drop files here, or
-        <div style={{ marginTop: 8 }}>
-          <button className="op-btn" onClick={() => inputRef.current?.click()} type="button">Browse</button>
+        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Drag & drop files here</div>
+        <div className="op-status" style={{ color: '#fff', opacity: 0.9, marginBottom: 12 }}>
+          or use the button below
         </div>
+        <div>
+          <button className="op-btn" onClick={() => inputRef.current?.click()} type="button" aria-label="Browse files">Browse</button>
+        </div>
+
         <p id="upload-help" className="sr-only">Press Enter or Space to open the file picker. You can also drag and drop files over this area.</p>
         <input
           ref={inputRef}
@@ -85,9 +86,7 @@ export default function UploadArea() {
         />
       </div>
 
-      <div className="op-divider" />
-
-      <div className="op-toolbar">
+      <div className="op-toolbar" style={{ marginTop: 8 }}>
         <span className={`op-status${ctxError ? ' error' : ''}`} aria-live="polite">
           {loading ? 'Parsing file…' : (ctxError || status)}
         </span>
@@ -102,6 +101,12 @@ export default function UploadArea() {
             Retry
           </button>
         ) : null}
+      </div>
+
+      <div className="op-card" style={{ marginTop: 8 }}>
+        <div className="op-status">
+          Need sample data? <a href="#" onClick={(e) => e.preventDefault()} style={{ color: '#fff', textDecoration: 'underline' }} aria-label="Open sample data info">View a sample CSV</a>
+        </div>
       </div>
 
       {!loading && !ctxError && status === 'Idle' && (

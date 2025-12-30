@@ -40,14 +40,12 @@
   }
 }
 
+/* legacy App-header retained but header styling moved to theme.css (.op-header) */
 .App-header {
   background-color: var(--bg-secondary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 0;
+  display: block;
+  font-size: 1rem;
   color: var(--text-primary);
   transition: background-color 0.3s ease;
   position: relative;
@@ -58,52 +56,40 @@
   transition: color 0.3s ease;
 }
 
+/* Theme toggle button adjusted to work on gradient header */
 .theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: 2px solid transparent;
+  background-color: rgba(255,255,255,0.15);
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.25);
   border-radius: 8px;
-  padding: 10px 20px;
+  padding: 10px 16px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
-
 .theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
 .theme-toggle:active {
   transform: translateY(0);
 }
-
 .theme-toggle:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* Responsive design for mobile */
 @media (max-width: 768px) {
   .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
+    padding: 8px 14px;
     font-size: 12px;
   }
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
